@@ -36,6 +36,21 @@ public class inventario {
         }
         return null;
     }
+    
+    
+    public void usarItem(String nombre, Heroe heroe) {
+    	Item item = buscarItem(nombre);
+    	
+    	if(item != null) {
+    		item.usar(heroe);
+    		
+    		eliminarItem(item);
+    		
+    		
+    	}else {
+    		System.out.println("No tienes el objeto");
+    	}
+    }
 
     // Getters por tipo, útil para mostrar solo armas, solo pociones, etc.
     public List<Arma> getArmas() {
