@@ -11,7 +11,7 @@ public class Curar implements Accion {
 
     @Override
     public void ejecutar() {
-        System.out.println("✨ " + curador.getNombre() + " cura a " + objetivo.getNombre() + " por " + cantidad + " puntos.");
+        System.out.println(curador.getNombre() + " cura a " + objetivo.getNombre() + " por " + cantidad + " puntos.");
         // Acá llamamos al método que está programando Ignacio
         objetivo.curarse(cantidad);
     }
