@@ -1,5 +1,18 @@
-package modelo;
+public class Atacar implements Accion {
+    private Entidad atacante;
+    private Entidad objetivo;
+    private int dano;
 
-public class Atacar extends Accion {
+    public Atacar(Entidad atacante, Entidad objetivo, int dano) {
+        this.atacante = atacante;
+        this.objetivo = objetivo;
+        this.dano = dano;
+    }
 
+    @Override
+    public void ejecutar() {
+        System.out.println("⚔️ " + atacante.getNombre() + " ataca a " + objetivo.getNombre() + " por " + dano + " de daño.");
+        // Acá llamamos al método que está programando Ignacio
+        objetivo.recibirDano(dano); 
+    }
 }
