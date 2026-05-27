@@ -11,7 +11,6 @@ public class HabilidadEsp implements Accion {
 
     @Override
     public void ejecutar() {
-        System.out.println("🔥 " + usuario.getNombre() + " usa su habilidad especial: " + nombreHabilidad + " en " + objetivo.getNombre());
-        // Lógica de la habilidad especial
+        System.out.println(usuario.getNombre() + " usa su habilidad especial: " + nombreHabilidad + " en " + objetivo.getNombre());
     }
 }
