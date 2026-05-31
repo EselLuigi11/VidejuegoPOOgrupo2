@@ -19,14 +19,14 @@ public class VistaInventario extends JFrame {
         panelParty = new JPanel();
         panelParty.setLayout(new GridLayout(0, 1));
         panelParty.add(new JLabel("--- TU PARTY ---"));
-        panelParty.add(new JLabel("Héroe 1: Arthur (Nivel 5)"));
-        panelParty.add(new JLabel("Héroe 2: Merlín (Nivel 4)"));
+        panelParty.add(new JLabel());
+        panelParty.add(new JLabel());
 
         panelItems = new JPanel();
         panelItems.setLayout(new GridLayout(0, 1));
-        panelItems.add(new JLabel("--- MOCHILA ---"));
-        panelItems.add(new JLabel("- Poción de Vida x3"));
-        panelItems.add(new JLabel("- Espada Larga x1"));
+        panelItems.add(new JLabel());
+        panelItems.add(new JLabel());
+        panelItems.add(new JLabel());
 
         add(panelParty, BorderLayout.WEST);
         add(panelItems, BorderLayout.CENTER);
