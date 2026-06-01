@@ -1,4 +1,4 @@
-package modelo;
+package modelo.acciones;
 
 public class Atacar implements Accion {
     private Entidad atacante;
