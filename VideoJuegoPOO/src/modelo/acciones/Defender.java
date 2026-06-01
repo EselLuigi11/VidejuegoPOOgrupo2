@@ -1,4 +1,4 @@
-package modelo;
+package modelo.acciones;
 
 public class Defender implements Accion {
     private Entidad defensor;
