@@ -30,5 +30,4 @@ public abstract class Item {
 		this.descripcion = descripcion; 
 		
 	}
-
 }
