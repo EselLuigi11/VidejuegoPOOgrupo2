@@ -1,4 +1,4 @@
-package vista;
+package modelo.vista;
 
 import java.awt.BorderLayout;
 
@@ -32,4 +32,12 @@ public class VistaBatalla extends JFrame {
 
         setVisible(true);
     }
+
+ 	public PanelAcciones getPanelAcciones() {
+ 		return this.panelAcciones;
+ 	}
+
+ 	public PanelEstado getPanelEstado() {
+ 		return this.panelEstado;
+ 	}
 }

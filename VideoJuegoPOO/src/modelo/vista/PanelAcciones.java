@@ -1,4 +1,4 @@
-package vista;
+package modelo.vista;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;

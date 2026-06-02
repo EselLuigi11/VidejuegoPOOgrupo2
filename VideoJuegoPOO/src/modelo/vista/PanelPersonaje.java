@@ -1,4 +1,4 @@
-package vista;
+package modelo.vista;
 
 import java.awt.BorderLayout;
 
