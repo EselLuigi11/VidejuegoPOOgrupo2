@@ -19,8 +19,8 @@ public class Enemigo extends Entidad {
 	public Enemigo(String nombre, int vida, int vidaMax, int ataque, int defensa, int velocidad,
 			boolean estaDefendiendo, int experienciaOtorgada, int nivelEnemigo, TipoEnemigo tipo) {
 		super(nombre, vida, vidaMax, ataque, defensa, velocidad, estaDefendiendo);
-		this.experienciaOtorgada = 0;
-		this.nivelEnemigo = 1;
+		this.experienciaOtorgada = experienciaOtorgada;
+		this.nivelEnemigo = nivelEnemigo;
 		this.tipo = tipo ; 
 		//default goblin, desp se cambia al crear el enemigo para x batalla/nivel.
 		}

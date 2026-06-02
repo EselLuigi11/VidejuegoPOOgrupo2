@@ -51,4 +51,20 @@ public class Batalla {
 	    }
 
 	}
+	
+	public boolean hayEnemigosVivos() {
+		for (Enemigo e : enemigos) {
+			if (e.estaVivo()) return true;
+		}
+		return false;
+	}
+ 
+	// Getters
+	public List<Enemigo> getEnemigos() {
+		return enemigos;
+	}
+ 
+	public List<Heroe> getHeroes() {
+		return heroes;
+	}
 }
