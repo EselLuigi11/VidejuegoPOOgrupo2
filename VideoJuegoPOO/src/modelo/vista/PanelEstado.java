@@ -11,7 +11,6 @@ public class PanelEstado extends JPanel {
 	private PanelPersonaje panelArquero;
 	private PanelPersonaje panelAsesino;
 	private PanelPersonaje panelCurador;
-	private PanelPersonaje panelHeroe6;
 	private PanelPersonaje panelEnemigo;
 
 	// CONSTRUCTOR
