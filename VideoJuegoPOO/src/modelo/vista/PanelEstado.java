@@ -11,7 +11,6 @@ public class PanelEstado extends JPanel {
 	private PanelPersonaje panelArquero;
 	private PanelPersonaje panelAsesino;
 	private PanelPersonaje panelCurador;
-	private PanelPersonaje panelHeroe6;
 	private PanelPersonaje panelEnemigo;
 
 	// CONSTRUCTOR
@@ -24,7 +23,6 @@ public class PanelEstado extends JPanel {
 		this.panelArquero = new PanelPersonaje("Arquero");
 		this.panelAsesino = new PanelPersonaje("Asesino");
 		this.panelCurador = new PanelPersonaje("Curador");
-		this.panelHeroe6 = new PanelPersonaje("Heroe 6");
 		this.panelEnemigo = new PanelPersonaje("Enemigo");
 
 		add(this.panelGuerrero);
@@ -32,7 +30,6 @@ public class PanelEstado extends JPanel {
 		add(this.panelArquero);
 		add(this.panelAsesino);
 		add(this.panelCurador);
-		add(this.panelHeroe6);
 		add(this.panelEnemigo);
 	}
 	
@@ -56,9 +53,7 @@ public class PanelEstado extends JPanel {
 		return panelCurador;
 	}
 
-	public PanelPersonaje getPanelHeroe6() {
-		return panelHeroe6;
-	}
+		
 
 	public PanelPersonaje getPanelEnemigo() {
 		return panelEnemigo;
