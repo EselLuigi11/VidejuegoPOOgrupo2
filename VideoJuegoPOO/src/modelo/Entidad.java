@@ -23,7 +23,7 @@ public class Entidad {
 	
 	//Métodos de Entidad, los recibirá tanto Héroe como Enemigo (como a su vez cada hérore y enemigo)
 	public void recibirDano(int cantidadDano) {
-	    final double K = 100.0; // Ajustar el valor en un futuro para balancear la reducción de daño por defensa
+	    final double K = 100.0; // Ajustar el valor en un futuro para balancear la reducción de dano por defensa
 	    // 1. Reducción por estadística defensa (siempre aplica, porcentual)
 	    double reduccionDefensa = this.defensa / (this.defensa + K);
 	    double danoReducido = cantidadDano * (1.0 - reduccionDefensa);
@@ -31,7 +31,7 @@ public class Entidad {
 	    if (this.estaDefendiendo) {
 	        danoReducido *= 0.7; // 30% menos adicional por guardia activa
 	    }
-	    // 3. Daño mínimo de 1 si el ataque era mayor a 0
+	    // 3. Dano mínimo de 1 si el ataque era mayor a 0
 	    int danoFinal = (int) danoReducido;
 	    if (danoFinal < 1 && cantidadDano > 0) {
 	        danoFinal = 1;

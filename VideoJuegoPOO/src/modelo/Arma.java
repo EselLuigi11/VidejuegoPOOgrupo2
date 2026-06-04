@@ -5,9 +5,9 @@ import modelo.entidades.Heroe;
 public class Arma extends Item {
 	private int plusdano;
 	
-	public Arma(String nombre, String descripcion, int daño) {
+	public Arma(String nombre, String descripcion, int dano) {
 		super(nombre, descripcion);
-		this.plusdano = daño;
+		this.plusdano = dano;
 	}
 	
 	public void usar(Heroe heroe) {
@@ -16,11 +16,11 @@ public class Arma extends Item {
 		
 	}
 
-	public int getPlusDaño() {
+	public int getPlusDano() {
 		return plusdano;
 	}
 
-	public void setPlusDaño(int plusdaño) {
+	public void setPlusDano(int plusdaño) {
 		this.plusdano = plusdaño;
 	}
 	
