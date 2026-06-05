@@ -61,7 +61,7 @@ public class Heroe extends Entidad {
 	public int calcularDanoBase() {
 		int danoTotal = this.getAtaque();
 		if (arma != null) {
-			danoTotal += arma.getPlusDaño();
+			danoTotal += arma.getPlusDano();
 		}
 		return danoTotal;
 	}
