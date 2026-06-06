@@ -28,4 +28,15 @@ public class PanelPersonaje extends JPanel {
     public JProgressBar getBarraVida() {
         return barraVida;
     }
+    
+    ImageIcon icono = new ImageIcon(getClass().getResource("/img/" + nombre.toLowerCase() + ".png"));
+    lblImagen = new JLabel(icono);
+
+    public void actualizarBarraVisual(int vidaActual, int vidaMax) {
+        barraVida.setMaximum(vidaMax);
+        barraVida.setValue(vidaActual);
+        barraVida.setString(vidaActual + "/" + vidaMax);
+    }
+    
 }
+   
