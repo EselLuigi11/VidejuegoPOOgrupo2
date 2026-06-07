@@ -7,7 +7,7 @@ import modelo.habilidades.HabEspMago;
 public class Mago extends Heroe {
 
     private int poderMagico; // Bonus al daño de habilidades mágicas
-    private modelo.habilidades.HabEspMago habilidadEspecial; // Habilidad exclusiva del Mago
+    private HabEspMago habilidadEspecial; // Habilidad exclusiva del Mago
 
     public Mago(String nombre, Arma arma, Armadura armadura) {
         super(nombre,
@@ -20,6 +20,7 @@ public class Mago extends Heroe {
                 20, 180,       // probCrit, danoCrit
                 arma, armadura);
             this.poderMagico = 30;
+         HabEspMago habilidadEspecial = new HabEspMago();
 
         // ── Tabla de niveles del Mago ──────────────────────────────────
         // Formato: tablaDeNiveles.put(nivel,
@@ -32,7 +33,15 @@ public class Mago extends Heroe {
         tablaDeNiveles.put(5, new StatsNivel(115, 23, 16, 20,  80, 212, 28, 272));
     }
 
-    @Override
+    public HabEspMago getHabilidadEspecial() {
+		return habilidadEspecial;
+	}
+
+	public void setHabilidadEspecial(HabEspMago habilidadEspecial) {
+		this.habilidadEspecial = habilidadEspecial;
+	}
+
+	@Override
     public void subirNivel() {
         super.subirNivel(); 
         this.poderMagico += 10; // stat exclusivo del Mago, se suma aparte

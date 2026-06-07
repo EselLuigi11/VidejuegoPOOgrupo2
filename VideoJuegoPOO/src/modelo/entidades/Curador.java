@@ -2,11 +2,12 @@ package modelo.entidades;
 
 import modelo.Arma;
 import modelo.Armadura;
+import modelo.habilidades.HabEspCurador;
 
 
 public class Curador extends Heroe implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
-    private modelo.habilidades.HabEspCurador habilidadEspecial;
+    private HabEspCurador habilidadEspecial;
 
     public Curador(String nombre, Arma arma, Armadura armadura) {
         super(nombre,
@@ -18,6 +19,7 @@ public class Curador extends Heroe implements java.io.Serializable {
                 80, 80,      // mana, manaMax
                 5, 100,      // probCrit, danoCrit
                 arma, armadura);
+        this.habilidadEspecial = new HabEspCurador();
 
         // ── Tabla de niveles del Curador ───────────────────────────────
         // Formato: tablaDeNiveles.put(nivel,
@@ -39,4 +41,13 @@ public class Curador extends Heroe implements java.io.Serializable {
     public void curar() {
         // TODO: implementar curación a un Heroe objetivo
     }
+
+	public HabEspCurador getHabilidadEspecial() {
+		return habilidadEspecial;
+	}
+
+	public void setHabilidadEspecial(HabEspCurador habilidadEspecial) {
+		this.habilidadEspecial = habilidadEspecial;
+	}
+    
 }

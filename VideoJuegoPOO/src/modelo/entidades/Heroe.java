@@ -103,7 +103,6 @@ public class Heroe extends Entidad {
         System.out.println("¡" + this.getNombre() + " subió al nivel " + this.nivel + "!");
  
         StatsNivel statsDelNivel = tablaDeNiveles.get(this.nivel);
- 
         if (statsDelNivel != null) {
             // ── Camino A: stats definidos manualmente en la tabla ──
             this.setVidaMax(statsDelNivel.getVidaMax());
@@ -115,7 +114,9 @@ public class Heroe extends Entidad {
             this.probCrit   = statsDelNivel.getProbCrit();
             this.danoCrit   = statsDelNivel.getDanoCrit();
             System.out.println("  → Stats aplicados desde tabla: " + statsDelNivel);
-        } else {
+        } 
+        else 
+        {
             // ── Camino B: incremento genérico de fallback ──
             // Útil si el jugador llega a un nivel no definido en la tabla.
             this.setVidaMax(this.getVidaMax() + 20);

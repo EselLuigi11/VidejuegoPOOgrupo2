@@ -2,6 +2,7 @@ package modelo.entidades;
  
 import modelo.Arma;
 import modelo.Armadura;
+import modelo.habilidades.HabEspArquero;
  
 /**
  * ARQUERO — Perfil: DPS físico de alto crítico y velocidad.
@@ -16,7 +17,7 @@ import modelo.Armadura;
  */
 public class Arquero extends Heroe implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
-    private modelo.habilidades.HabEspArquero habilidadEspecial;
+    private HabEspArquero habilidadEspecial;
  
     public Arquero(String nombre, Arma arma, Armadura armadura) {
         super(nombre,
@@ -28,6 +29,7 @@ public class Arquero extends Heroe implements java.io.Serializable {
                 0, 0,        // mana, manaMax (el Arquero no usa mana)
                 30, 160,     // probCrit, danoCrit
                 arma, armadura);
+        this.habilidadEspecial = new HabEspArquero();
  
        // ── Tabla de niveles del Arquero ───────────────────────────────
  // tablaDeNiveles.put(nivel, new StatsNivel(vidaMax, ataque, defensa, velocidad, energiaMax, manaMax, probCrit, danoCrit))
@@ -43,4 +45,13 @@ public class Arquero extends Heroe implements java.io.Serializable {
         super.subirNivel(); // aplica la tabla
         System.out.println("  ¡El Arquero " + getNombre() + " subió de nivel!");
     }
+
+	public HabEspArquero getHabilidadEspecial() {
+		return habilidadEspecial;
+	}
+
+	public void setHabilidadEspecial(HabEspArquero habilidadEspecial) {
+		this.habilidadEspecial = habilidadEspecial;
+	}
+    
 }

@@ -46,3 +46,5 @@ public class Partida implements java.io.Serializable {
 		this.inventarioPartida = inventarioPartida;
 	}
 }
+
+

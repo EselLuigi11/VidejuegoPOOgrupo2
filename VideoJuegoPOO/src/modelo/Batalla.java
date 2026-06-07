@@ -1,11 +1,11 @@
 package modelo;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import modelo.entidades.Enemigo;
 import modelo.entidades.Heroe;
 
-import java.util.ArrayList;
 
 public class Batalla {
 	private List<Heroe> heroes;
@@ -20,41 +20,39 @@ public class Batalla {
 	}
 	
 	public EstadoBatalla evaluarEstado() {
-	    
 	    boolean todosHeroesMuertos = true; 
 	    
 	    for (Heroe h : heroes) {
-	        if (h.estaVivo()) {
+	        if (h.estaVivo() && h!= null) {
 	            todosHeroesMuertos = false;
 	        }
 	    }
 
 	    boolean todosEnemigosMuertos = true;
-	    
 	    for (Enemigo e : enemigos) {
-	    	if (e.estaVivo()) {
+	    	if (e.estaVivo() && e!= null) {
 	    		todosEnemigosMuertos = false;
 	    	}
 	    }
 
-	    
 	    if (todosHeroesMuertos) {
-	    	return EstadoBatalla.DERROTA;
+	    	estadoActual = EstadoBatalla.DERROTA;
 	    }
 	    
 	    else if (todosEnemigosMuertos) {
-	    	return EstadoBatalla.VICTORIA;
+	    	estadoActual = EstadoBatalla.VICTORIA;
 	    }
 	    
 	    else {
-	    	return EstadoBatalla.EN_CURSO;
+	    	estadoActual = EstadoBatalla.EN_CURSO;
 	    }
+	    return estadoActual;
 
 	}
 	
 	public boolean hayEnemigosVivos() {
 		for (Enemigo e : enemigos) {
-			if (e.estaVivo()) return true;
+			if (e != null && e.estaVivo()) return true;
 		}
 		return false;
 	}
@@ -67,4 +65,5 @@ public class Batalla {
 	public List<Heroe> getHeroes() {
 		return heroes;
 	}
+	
 }

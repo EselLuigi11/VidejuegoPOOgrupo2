@@ -2,10 +2,11 @@ package modelo.entidades;
  
 import modelo.Arma;
 import modelo.Armadura;
+import modelo.habilidades.HabEspAsesino;
  
 public class Asesino extends Heroe implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
-    private modelo.habilidades.HabEspAsesino habilidadEspecial;
+    private HabEspAsesino habilidadEspecial;
  
     // private boolean sigilo; // activar cuando implementen la habilidad
  
@@ -19,6 +20,8 @@ public class Asesino extends Heroe implements java.io.Serializable {
                 0, 0,        // mana, manaMax (el Asesino no usa mana)
                 40, 200,     // probCrit, danoCrit
                 arma, armadura);
+        this.habilidadEspecial = new HabEspAsesino();
+
  
         // ── Tabla de niveles del Asesino ───────────────────────────────
         // Formato: tablaDeNiveles.put(nivel,
@@ -36,4 +39,13 @@ public class Asesino extends Heroe implements java.io.Serializable {
         super.subirNivel(); // aplica la tabla
         System.out.println("  ¡El Asesino " + getNombre() + " subió de nivel!");
     }
+
+	public HabEspAsesino getHabilidadEspecial() {
+		return habilidadEspecial;
+	}
+
+	public void setHabilidadEspecial(HabEspAsesino habilidadEspecial) {
+		this.habilidadEspecial = habilidadEspecial;
+	}
+    
 }

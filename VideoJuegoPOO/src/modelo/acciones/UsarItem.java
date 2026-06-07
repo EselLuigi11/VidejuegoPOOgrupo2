@@ -19,6 +19,16 @@ public class UsarItem extends Accion {
 
     @Override
     public void ejecutar() {
+        if (partida == null || heroe == null || item == null) {
+            System.out.println("No se puede usar el ítem porque faltan datos.");
+            return;
+        }
+
+        if (!heroe.estaVivo()) {
+            System.out.println(heroe.getNombre() + " no puede usar ítems porque está fuera de combate.");
+            return;
+        }
+
         Inventario inventario = partida.getInventarioPartida();
         
         if (inventario.contieneItem(item)) {

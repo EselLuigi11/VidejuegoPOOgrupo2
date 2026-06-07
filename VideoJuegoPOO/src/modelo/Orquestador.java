@@ -37,7 +37,6 @@ public class Orquestador {
  
 		if (estadoTrasAccion == EstadoBatalla.VICTORIA) {
 			log.append("¡Los héroes han ganado la batalla!\n");
-			partidaActual.pasarSiguienteNivel();
 			return log.toString();
 		}
  
@@ -72,28 +71,4 @@ public class Orquestador {
 
 	//----------ESTO ES LO QUE HIZO ALGUIEN, NECESITO SABER SI CAMBIO LO DE ARRIBA POR ESTO O NO///
 	
-	/*
-	public void procesarSiguienteTurno (Entidad personaje, Accion accionElegida) {
-		if (this.batallaActual.evaluarEstado() != EstadoBatalla.EN_CURSO) {
-			System.out.println("La batalla ya terminó. No se pueden jugar más turnos");
-			return;
-		}
-	    
-		Turno nuevoTurno = new Turno(this.contadorTurnos, personaje);
-	    nuevoTurno.procesarAccion(accionElegida);
-	    this.contadorTurnos++;
-
-	    // --- EL FINAL ---
-	    EstadoBatalla estadoFinal = this.batallaActual.evaluarEstado();
-
-	    if (estadoFinal == EstadoBatalla.VICTORIA) {
-	        System.out.println("¡Los héroes han ganado la batalla!");
-	        this.partidaActual.pasarSiguienteNivel();
-	        
-	    } else if (estadoFinal == EstadoBatalla.DERROTA) {
-	        System.out.println("Game Over. Los enemigos ganaron.");
-	        this.partidaActual.verificarEstadoPartida();
-	    }
-	}
-	*/
 }
