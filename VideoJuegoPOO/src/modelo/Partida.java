@@ -3,17 +3,17 @@ package modelo;
 public class Partida implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
-	
 	private boolean estado;
 	private Party grupo;
 	private Inventario inventarioPartida;
+	private int nivel; // AGREGADO: Para solucionar el error del Repositorio
 	
 	public Partida() {
 		this.estado = true;
-		this.grupo = new Party("Luchadores de la Luz"); //Nombre del grupo, se puede cambiar por input del usuario
-		this.inventarioPartida = new Inventario(20); //20 objetos por inventario, podemos mejorar el espacio en algun nivel
+		this.nivel = 1; // El juego arranca en el nivel 1
+		this.grupo = new Party("Luchadores de la Luz"); // Nombre del grupo
+		this.inventarioPartida = new Inventario(20); // 20 objetos por inventario
 	}
-	
 	
 	public void verificarEstadoPartida() {
 		if (this.grupo.estaVivo() == false) {
@@ -21,11 +21,21 @@ public class Partida implements java.io.Serializable {
 			System.out.println("Game Over");
 		}
 	}
+	
+	// MÉTODOS AGREGADOS PARA ARREGLAR LOS ERRORES
+	public int getNivel() {
+		return nivel;
+	}
+	
+	public void pasarSiguienteNivel() {
+		this.nivel++;
+	}
+
+	// GETTERS Y SETTERS ORIGINALES
 	public Inventario getInventarioPartida() { 
 		return inventarioPartida; 
 	}
 	
-
 	public boolean isEstado() {
 		return estado;
 	}
@@ -46,5 +56,3 @@ public class Partida implements java.io.Serializable {
 		this.inventarioPartida = inventarioPartida;
 	}
 }
-
-

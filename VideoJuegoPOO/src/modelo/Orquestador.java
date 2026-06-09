@@ -11,14 +11,14 @@ public class Orquestador {
 	private Partida partidaActual;
 	
 	// Constructor
-	public Orquestador (Batalla batallaActual, Partida partidaActual) {
+	public Orquestador(Batalla batallaActual, Partida partidaActual) {
 		this.batallaActual = batallaActual;
-		this.contadorTurnos = 0; //VERIF
+		this.contadorTurnos = 0; 
 		this.partidaActual = partidaActual;
 	}
 	
-	//-------ACTUALIZACIÓN DEL PROCESO DE TURNO-------
-	public String procesarTurno(Accion accion) {
+	// AGREGADO: throws Exception para que tu controlador pueda atajar los errores
+	public String procesarTurno(Accion accion) throws Exception {
 		StringBuilder log = new StringBuilder();
  
 		// 1. Verificar que la batalla no haya terminado ya
@@ -26,8 +26,8 @@ public class Orquestador {
 			return "La batalla ya terminó. No se pueden jugar más turnos.";
 		}
  
-		// 2. Ejecutar la acción del jugador
-		log.append("── Turno " + contadorTurnos + " ──\n");
+		// 2. Ejecutar la acción del jugador (Si falla, lanza Exception al Controlador)
+		log.append("── Turno ").append(contadorTurnos).append(" ──\n");
 		accion.ejecutar();
 		log.append("[Acción del héroe ejecutada]\n");
 		contadorTurnos++;
@@ -37,6 +37,7 @@ public class Orquestador {
  
 		if (estadoTrasAccion == EstadoBatalla.VICTORIA) {
 			log.append("¡Los héroes han ganado la batalla!\n");
+			partidaActual.pasarSiguienteNivel();
 			return log.toString();
 		}
  
@@ -49,7 +50,7 @@ public class Orquestador {
  
 			for (Enemigo enemigo : batallaActual.getEnemigos()) {
 				if (enemigo.estaVivo() && !heroesVivos.isEmpty()) {
-					log.append(enemigo.getNombre() + " contraataca.\n");
+					log.append(enemigo.getNombre()).append(" contraataca.\n");
 					enemigo.EnemigoAtaca(heroesVivos); // usa la lógica de IA existente
 				}
 			}
@@ -68,7 +69,4 @@ public class Orquestador {
  
 		return log.toString();
 	}
-
-	//----------ESTO ES LO QUE HIZO ALGUIEN, NECESITO SABER SI CAMBIO LO DE ARRIBA POR ESTO O NO///
-	
 }

@@ -18,13 +18,7 @@ public class RepositorioPartida {
 
     // ── Guardar ───────────────────────────────────────────────
 
-    /**
-     * Guarda el estado actual de la partida en disco.
-     * Incluye: batalla actual, héroes con sus stats, inventario.
-     * Si ya había una partida guardada la sobreescribe.
-     */
     public boolean guardar(Partida partida) {
-        // Crear la carpeta si no existe
         File carpeta = new File(CARPETA);
         if (!carpeta.exists()) {
             carpeta.mkdirs();
@@ -47,11 +41,6 @@ public class RepositorioPartida {
 
     // ── Cargar ────────────────────────────────────────────────
 
-    /**
-     * Carga la partida guardada desde disco.
-     * El juego retoma exactamente desde la batalla donde se guardó,
-     * con los mismos héroes y el mismo inventario.
-     */
     public Partida cargar() {
         if (!existeSave()) {
             System.out.println("No hay ninguna partida guardada.");
@@ -75,12 +64,10 @@ public class RepositorioPartida {
 
     // ── Utilidades ────────────────────────────────────────────
 
-    /** True si existe un archivo de partida guardada en disco. */
     public boolean existeSave() {
         return new File(ARCHIVO_GUARDADO).exists();
     }
 
-    /** Borra el archivo guardado. Llamarlo cuando el jugador elige Nueva Partida. */
     public boolean borrar() {
         File archivo = new File(ARCHIVO_GUARDADO);
         if (archivo.exists()) {
@@ -92,7 +79,6 @@ public class RepositorioPartida {
         return false;
     }
 
-    /** Devuelve el path completo del archivo guardado. */
     public String getRutaArchivo() {
         return ARCHIVO_GUARDADO;
     }

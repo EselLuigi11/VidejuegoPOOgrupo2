@@ -3,11 +3,12 @@ package principal;
 import java.util.ArrayList;
 import controlador.ControladorJuego;
 import modelo.Batalla;
-import modelo.Orquestador;
+import modelo.OrquestadorF;
 import modelo.Partida;
 import modelo.entidades.Enemigo;
 import modelo.entidades.Heroe;
 import modelo.vista.VistaBatalla;
+import modelo.vista.VistaInventario; // <-- AGREGADO: Importamos la vista del inventario
 import modelo.vista.VistaMenuPrincipal;
 
 public class Main {
@@ -19,16 +20,18 @@ public class Main {
 		// El Orquestador necesita una Batalla para nacer. 
 		// Como recién abrimos el juego, creamos una batalla con listas vacías por ahora.
 		Batalla batallaInicial = new Batalla(new ArrayList<Heroe>(), new ArrayList<Enemigo>());
-		Orquestador orquestador = new Orquestador(batallaInicial, partida);
+		OrquestadorF orquestador = new OrquestadorF(batallaInicial, partida);
 		
 		VistaMenuPrincipal menu = new VistaMenuPrincipal();
 		VistaBatalla pantallaBatalla = new VistaBatalla();
+		VistaInventario inventario = new VistaInventario(); // <-- AGREGADO: Instanciamos el inventario
 		
-		// Si no la apagamos acá, van a aparecer las dos pantallas superpuestas al mismo tiempo.
+		// Nos aseguramos de que las pantallas secundarias arranquen ocultas
 		pantallaBatalla.setVisible(false); 
+		inventario.setVisible(false); // <-- AGREGADO
 	
-		// Le pasamos las 4 cosas que nos pediste en el constructor que armaste antes
-		ControladorJuego controlador = new ControladorJuego(partida, orquestador, menu, pantallaBatalla);
+		// Le pasamos las 5 referencias que el constructor necesita obligatoriamente
+		ControladorJuego controlador = new ControladorJuego(partida, orquestador, menu, pantallaBatalla, inventario);
 		
 		controlador.iniciar();
 		
