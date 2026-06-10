@@ -3,7 +3,7 @@ package controlador;
 import javax.swing.JOptionPane;
 import java.util.List;
 import modelo.Partida;
-import modelo.OrquestadorF;
+import modelo.Orquestador;
 import modelo.acciones.Atacar;
 import modelo.acciones.Defender;
 import modelo.entidades.Enemigo;
@@ -14,13 +14,13 @@ import modelo.vista.VistaInventario;
 
 public class ControladorJuego {
 	private Partida partida;
-	private OrquestadorF orquestador;
+	private Orquestador orquestador;
 	private VistaMenuPrincipal vistaMenu;
 	private VistaBatalla vistaBatalla;
 	private VistaInventario vistaInventario;
 	private int nivelActual = 1;
 	
-	public ControladorJuego(Partida partida, OrquestadorF orquestador, VistaMenuPrincipal vistaMenu, VistaBatalla vistaBatalla, VistaInventario vistaInventario) {
+	public ControladorJuego(Partida partida, Orquestador orquestador, VistaMenuPrincipal vistaMenu, VistaBatalla vistaBatalla, VistaInventario vistaInventario) {
 		this.partida = partida;
 		this.orquestador = orquestador;
 		this.vistaMenu = vistaMenu;
