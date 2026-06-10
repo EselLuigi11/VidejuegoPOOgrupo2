@@ -1,69 +1,184 @@
 package modelo.vista;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Image;
+import java.awt.*;
+import javax.swing.*;
+import modelo.Entidad;
+import modelo.entidades.Heroe;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingConstants;
-
+/**
+ * Panel que representa visualmente a UNA entidad (Héroe o Enemigo) en combate.
+ *
+ * CAMBIOS vs versión anterior:
+ *  - Ya NO recibe un String hardcodeado. Recibe una Entidad real del modelo.
+ *  - Expone refresh() para que el Controlador sincronice la UI con el modelo
+ *    en un único punto (actualizarInterfazGrafica).
+ *  - Barra de maná visible solo para Héroes.
+ *  - Color de alerta cuando HP < 30%.
+ */
 public class PanelPersonaje extends JPanel {
 
-    private JLabel lblNombre;
-    private JProgressBar barraVida;
-    private JLabel lblImagen;
+    // ── Referencia al modelo ──────────────────────────────────────────────────
+    private final Entidad entidad;
 
-    public PanelPersonaje(String nombre) {
+    // ── Componentes de vista ──────────────────────────────────────────────────
+    private final JLabel        lblNombre;
+    private final JProgressBar  barraVida;
+    private final JProgressBar  barraMana;   // null para Enemigos
+    private final JLabel        lblVidaTexto;
+    private final JLabel        lblManaTexto; // null para Enemigos
+    private final JLabel        lblImagen;
 
-        setLayout(new BorderLayout());
+    // ── Paleta ────────────────────────────────────────────────────────────────
+    private static final Color COLOR_VIDA_OK    = new Color(50, 200, 70);
+    private static final Color COLOR_VIDA_BAJA  = new Color(220, 50, 50);
+    private static final Color COLOR_MANA       = new Color(60, 120, 220);
+    private static final Color COLOR_BG         = new Color(15, 15, 30, 210);
+    private static final Color COLOR_BORDE      = new Color(90, 90, 150);
+    private static final Font  FUENTE_NOMBRE    = new Font("Serif",      Font.BOLD,  13);
+    private static final Font  FUENTE_STATS     = new Font("Monospaced", Font.PLAIN, 10);
 
-        lblNombre = new JLabel(nombre, SwingConstants.CENTER);
+    // ─────────────────────────────────────────────────────────────────────────
 
-        barraVida = new JProgressBar(0, 100);
-        barraVida.setValue(100);
+    /**
+     * @param entidad  La entidad del modelo que este panel representa.
+     *                 No puede ser null.
+     */
+    public PanelPersonaje(Entidad entidad) {
+        if (entidad == null) throw new IllegalArgumentException("Entidad no puede ser nula.");
+        this.entidad = entidad;
 
-        // Oculta el texto 100/100 dentro de la barra
-        barraVida.setStringPainted(false);
+        setLayout(new GridBagLayout());
+        setOpaque(true);
+        setBackground(COLOR_BG);
+        setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(COLOR_BORDE, 1, true),
+            BorderFactory.createEmptyBorder(4, 8, 4, 8)
+        ));
+        setPreferredSize(new Dimension(160, esHeroe() ? 130 : 110));
 
-        // Barra pequeña
-        barraVida.setPreferredSize(new Dimension(70, 10));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets    = new Insets(2, 2, 2, 2);
+        gbc.fill      = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = 2;
+        gbc.weightx   = 1.0;
 
-        try {
+        // ── Fila 0: sprite ────────────────────────────────────────────────────
+        lblImagen = cargarSprite(entidad.getNombre());
+        gbc.gridx = 0; gbc.gridy = 0;
+        add(lblImagen, gbc);
 
-            ImageIcon iconoOriginal = new ImageIcon(
-                    getClass().getResource("/img/" + nombre.toLowerCase() + ".png"));
+        // ── Fila 1: nombre ────────────────────────────────────────────────────
+        lblNombre = new JLabel(entidad.getNombre(), SwingConstants.CENTER);
+        lblNombre.setFont(FUENTE_NOMBRE);
+        lblNombre.setForeground(Color.WHITE);
+        gbc.gridy = 1;
+        add(lblNombre, gbc);
 
-            Image imagenEscalada = iconoOriginal.getImage()
-                    .getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+        // ── Fila 2: barra de vida ─────────────────────────────────────────────
+        barraVida = crearBarra(entidad.getVidaMax(), COLOR_VIDA_OK);
+        gbc.gridy = 2;
+        add(barraVida, gbc);
 
-            lblImagen = new JLabel(new ImageIcon(imagenEscalada));
-            lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
+        lblVidaTexto = crearLabelStat();
+        gbc.gridy = 3;
+        add(lblVidaTexto, gbc);
 
-            // Barra arriba
-            add(barraVida, BorderLayout.NORTH);
-
-            // Sprite en el centro
-            add(lblImagen, BorderLayout.CENTER);
-
-            // Nombre abajo
-
-        } catch (Exception e) {
-            System.out.println("No se encontró la imagen para: " + nombre);
+        // ── Filas 4-5: maná (solo Héroes) ─────────────────────────────────────
+        if (esHeroe()) {
+            Heroe h = (Heroe) entidad;
+            barraMana    = crearBarra(Math.max(h.getManaMax(), 1), COLOR_MANA);
+            lblManaTexto = crearLabelStat();
+            gbc.gridy = 4; add(barraMana,    gbc);
+            gbc.gridy = 5; add(lblManaTexto, gbc);
+        } else {
+            barraMana    = null;
+            lblManaTexto = null;
         }
+
+        // Primera sincronización
+        refresh();
     }
 
-    public JProgressBar getBarraVida() {
-        return barraVida;
+    // ── API pública ───────────────────────────────────────────────────────────
+
+    /**
+     * Sincroniza TODOS los componentes visuales con el estado actual de la Entidad.
+     * El Controlador llama a este método desde actualizarInterfazGrafica().
+     */
+    public void refresh() {
+        int vida    = entidad.getVida();
+        int vidaMax = entidad.getVidaMax();
+
+        barraVida.setMaximum(Math.max(vidaMax, 1));
+        barraVida.setValue(Math.max(0, vida));
+        barraVida.setForeground(
+            (double) vida / vidaMax < 0.30 ? COLOR_VIDA_BAJA : COLOR_VIDA_OK
+        );
+        lblVidaTexto.setText("HP " + vida + "/" + vidaMax);
+
+        if (esHeroe()) {
+            Heroe h   = (Heroe) entidad;
+            int mana  = h.getMana();
+            int manaM = Math.max(h.getManaMax(), 1);
+            barraMana.setMaximum(manaM);
+            barraMana.setValue(Math.max(0, mana));
+            lblManaTexto.setText("MP " + mana + "/" + manaM);
+        }
+
+        // Tachar el nombre si cayó en combate
+        boolean muerto = vida <= 0;
+        lblNombre.setText(muerto
+            ? "<html><s>" + entidad.getNombre() + "</s></html>"
+            : entidad.getNombre());
     }
 
-    public void actualizarBarraVisual(int vidaActual, int vidaMax) {
-        barraVida.setMaximum(vidaMax);
-        barraVida.setValue(vidaActual);
+    /** Devuelve la entidad del modelo asociada a este panel. */
+    public Entidad getEntidad() { return entidad; }
 
-        // El texto se muestra como tooltip en lugar de dentro de la barra
-        barraVida.setToolTipText(vidaActual + "/" + vidaMax);
+    // ── Helpers privados ──────────────────────────────────────────────────────
+
+    private boolean esHeroe() { return entidad instanceof Heroe; }
+
+    private JProgressBar crearBarra(int maximo, Color color) {
+        JProgressBar b = new JProgressBar(0, maximo);
+        b.setForeground(color);
+        b.setBackground(new Color(35, 35, 55));
+        b.setBorderPainted(false);
+        b.setStringPainted(false);
+        b.setPreferredSize(new Dimension(0, 10));
+        return b;
+    }
+
+    private JLabel crearLabelStat() {
+        JLabel lbl = new JLabel("", SwingConstants.CENTER);
+        lbl.setFont(FUENTE_STATS);
+        lbl.setForeground(Color.LIGHT_GRAY);
+        return lbl;
+    }
+
+    /**
+     * Intenta cargar /img/<nombre_en_minúsculas>.png.
+     * Si no existe, muestra un placeholder de texto para no romper la UI.
+     */
+    private JLabel cargarSprite(String nombre) {
+        JLabel lbl = new JLabel();
+        lbl.setHorizontalAlignment(SwingConstants.CENTER);
+        try {
+            java.net.URL url = getClass().getResource(
+                "/img/" + nombre.toLowerCase().replace(" ", "_") + ".png");
+            if (url != null) {
+                Image img = new ImageIcon(url).getImage()
+                    .getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+                lbl.setIcon(new ImageIcon(img));
+            } else {
+                lbl.setText("[" + nombre.charAt(0) + "]");
+                lbl.setForeground(Color.YELLOW);
+                lbl.setFont(new Font("Serif", Font.BOLD, 22));
+            }
+        } catch (Exception e) {
+            lbl.setText("[?]");
+            lbl.setForeground(Color.ORANGE);
+        }
+        return lbl;
     }
 }

@@ -29,9 +29,6 @@ public class Heroe extends Entidad {
     //Ejemplo en Guerrero:
        // *   tablaDeNiveles.put(2, new StatsNivel(200, 28, 50, 8, 110, 0, 5, 150));
        // A nivel 2 del guerrero se reajustan las estadisticas a vidaMax 200, ataque 28 ... etc 
-
-	
-	
 	
 	public Heroe(String nombre, int vida, int vidaMax,
 			int ataque, int defensa,
@@ -167,7 +164,13 @@ public class Heroe extends Entidad {
 		System.out.println(this.getNombre() + " equipa: " + armadura.getNombre());
 	}
     
-	
+	public void restaurarStatusCompleto() {
+		this.setVida(this.getVidaMax());
+		if (this.getManaMax() > 0) {
+			this.setMana(this.getManaMax());
+		}
+		this.setEstaDefendiendo(false);
+	}
 	
 
 	public int getEnergiaMax() {
