@@ -1,5 +1,7 @@
 package modelo;
 
+import modelo.pociones.PocionVida;
+
 public class Partida implements java.io.Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -13,8 +15,12 @@ public class Partida implements java.io.Serializable {
 		this.nivel = 1; // El juego arranca en el nivel 1
 		this.grupo = new Party("Luchadores de la Luz"); // Nombre del grupo
 		this.inventarioPartida = new Inventario(20); // 20 objetos por inventario
-	}
 	
+		this.inventarioPartida.agregarItem(new PocionVida("Poción de Vida", "Restaura 50 HP a un héroe.", 50));
+		this.inventarioPartida.agregarItem(new PocionVida("Poción de Vida", "Restaura 50 HP a un héroe.", 50));
+		this.inventarioPartida.agregarItem(new PocionVida("Poción de Vida", "Restaura 50 HP a un héroe.", 50));
+	}
+
 	public void verificarEstadoPartida() {
 		if (this.grupo.estaVivo() == false) {
 			this.estado = false;

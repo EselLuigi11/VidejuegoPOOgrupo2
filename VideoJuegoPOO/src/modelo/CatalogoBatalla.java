@@ -58,6 +58,7 @@ public class CatalogoBatalla {
         List<Enemigo> batalla1 = new ArrayList<>();
         batalla1.add(new Enemigo("Goblin Explorador",  40, 40, 12, 5,  14, false, 30, 1, TipoEnemigo.GOBLIN));
         batalla1.add(new Enemigo("Goblin Escudo",      55, 55, 8,  18, 10, false, 25, 1, TipoEnemigo.GOBLIN));
+        batalla1.add(new Enemigo("Goblin Escudo",      55, 55, 8,  18, 10, false, 25, 1, TipoEnemigo.GOBLIN));
         batallas.put(1, batalla1);
 
         // ── Batalla 2 — Goblin y Ladrones ───────────────
