@@ -26,7 +26,7 @@ public class VistaBatalla extends JFrame {
 
     public VistaBatalla() {
         setTitle("Videojuego POO — Batalla");
-        setSize(900, 600);
+        setSize(960, 680);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);

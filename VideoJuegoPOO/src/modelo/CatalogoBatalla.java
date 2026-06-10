@@ -50,34 +50,32 @@ public class CatalogoBatalla {
     // new Enemigo(nombre, vida, vidaMax, ataque, defensa, velocidad,
     //             estaDefendiendo, expOtorgada, nivelEnemigo, tipo)
 
-    private void cargarBatallas() {
+ // EN: VideoJuegoPOO/src/modelo/CatalogoBatalla.java
+ // REEMPLAZAR el método cargarBatallas() completo:
 
-        // ── Batalla 1 — Goblins
-        // Fácil: dos goblins exploradores. Introducción al combate.
-    	// Creamos la primera lista batalla1 con los enemigosque la componen.
-        List<Enemigo> batalla1 = new ArrayList<>();
-        batalla1.add(new Enemigo("Goblin Explorador",  40, 40, 12, 5,  14, false, 30, 1, TipoEnemigo.GOBLIN));
-        batalla1.add(new Enemigo("Goblin Escudo",      55, 55, 8,  18, 10, false, 25, 1, TipoEnemigo.GOBLIN));
-        batallas.put(1, batalla1);
+ private void cargarBatallas() {
 
-        // ── Batalla 2 — Goblin y Ladrones ───────────────
-        // Media: mezcla de Goblins y Ladrones. El Ladrón siempre ataca
-        // al primero de la lista, los Goblins van random.
-        List<Enemigo> batalla2 = new ArrayList<>();
-        batalla2.add(new Enemigo("Goblin Escudo",   55, 55, 8,  18, 10, false, 25, 1, TipoEnemigo.GOBLIN));
-        batalla2.add(new Enemigo("Ladrón Veloz",    55, 55, 18, 8,  20, false, 40, 2, TipoEnemigo.LADRON));
-        batalla2.add(new Enemigo("Ladrón Arquero",  45, 45, 22, 6,  18, false, 35, 2, TipoEnemigo.LADRON));
-        batallas.put(2, batalla2);
+     // ── Nivel 1 — 3 Goblins (introducción, sin presión real)
+     List<Enemigo> batalla1 = new ArrayList<>();
+     batalla1.add(new Enemigo("Goblin Explorador", 40, 40, 12, 5,  14, false, 30, 1, TipoEnemigo.GOBLIN));
+     batalla1.add(new Enemigo("Goblin Escudo",     55, 55,  8, 18, 10, false, 25, 1, TipoEnemigo.GOBLIN));
+     batalla1.add(new Enemigo("Goblin Salvaje",    45, 45, 15, 6,  16, false, 28, 1, TipoEnemigo.GOBLIN));
+     batallas.put(1, batalla1);
 
-        // ── Batalla 3 — Golem y Brujos ──────────────────
-        // Difícil: dos Brujos random + un Gólem que ataca al de más vida.
-        // El Gólem es el jefe — mucha vida y defensa alta.
-        List<Enemigo> batalla3 = new ArrayList<>();
-        batalla3.add(new Enemigo("Brujo Aprendiz",    60,  60,  20, 10, 14, false, 50,  2, TipoEnemigo.BRUJO));
-        batalla3.add(new Enemigo("Brujo Aprendiz",    60,  60,  20, 10, 14, false, 50,  2, TipoEnemigo.BRUJO));
-        batalla3.add(new Enemigo("Gólem de Piedra",   180, 180, 28, 35, 6,  false, 120, 3, TipoEnemigo.GOLEM));
-        batallas.put(3, batalla3);
-    }
+     // ── Nivel 2 — 1 Goblin + 2 Ladrones (presión mixta)
+     List<Enemigo> batalla2 = new ArrayList<>();
+     batalla2.add(new Enemigo("Goblin Escudo",   55, 55,  8, 18, 10, false, 25, 1, TipoEnemigo.GOBLIN));
+     batalla2.add(new Enemigo("Ladrón Veloz",    55, 55, 18,  8, 20, false, 40, 2, TipoEnemigo.LADRON));
+     batalla2.add(new Enemigo("Ladrón Arquero",  45, 45, 22,  6, 18, false, 35, 2, TipoEnemigo.LADRON));
+     batallas.put(2, batalla2);
+
+     // ── Nivel 3 — 2 Brujos + 1 Gólem (tanque final)
+     List<Enemigo> batalla3 = new ArrayList<>();
+     batalla3.add(new Enemigo("Brujo Aprendiz",  60,  60, 20, 10, 14, false,  50, 2, TipoEnemigo.BRUJO));
+     batalla3.add(new Enemigo("Brujo Oscuro",    70,  70, 25, 12, 12, false,  60, 2, TipoEnemigo.BRUJO));
+     batalla3.add(new Enemigo("Gólem de Piedra", 180, 180, 28, 35,  6, false, 120, 3, TipoEnemigo.GOLEM));
+     batallas.put(3, batalla3);
+ }
 
     // ── Construcción de la Batalla real ──────────────────────
     //Basicamente, es una función de tipo Batalla que recibe el nro de Batalla y la lista de héroes vivos, y devuelve una nueva Batalla con esos héroes y los enemigos correspondientes a ese número de batalla.

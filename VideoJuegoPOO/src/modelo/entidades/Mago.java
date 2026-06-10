@@ -20,7 +20,7 @@ public class Mago extends Heroe {
                 20, 180,       // probCrit, danoCrit
                 arma, armadura);
             this.poderMagico = 30;
-         HabEspMago habilidadEspecial = new HabEspMago();
+            this.habilidadEspecial = new HabEspMago();
 
         // ── Tabla de niveles del Mago ──────────────────────────────────
         // Formato: tablaDeNiveles.put(nivel,

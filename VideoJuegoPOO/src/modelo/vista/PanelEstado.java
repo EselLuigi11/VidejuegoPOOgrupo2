@@ -25,20 +25,31 @@ public class PanelEstado extends JPanel {
     private final List<PanelPersonaje> panelesEnemigos = new ArrayList<>();
 
     // ── Layout ────────────────────────────────────────────────────────────────
-    // Ancho del área de estado (sincronizado con VistaBatalla.setSize(900,…))
+    // EN: VideoJuegoPOO/src/modelo/vista/PanelEstado.java
+    // REEMPLAZAR las constantes de posición y tamaño:
+
     private static final int ANCHO = 900;
-    private static final int ALTO  = 420;
+    private static final int ALTO = 500;
 
-    // Posiciones base para cada bando (máx 5 héroes, máx 3 enemigos)
+    // Héroes: columna izquierda, de arriba a abajo, con margen suficiente.
+    // Cada panel mide 160×100 → gap vertical de 10px entre cada uno.
+    // 5 héroes × 110 = 550 > ALTO, así que usamos 2 columnas side-by-side.
     private static final int[][] POS_HEROES = {
-        {300, 300}, {230, 230}, {160, 160}, { 90,  90}, { 20,  20}
-    };
-    private static final int[][] POS_ENEMIGOS = {
-        {700,  30}, {640, 130}, {700, 230}
-    };
+    		{ 10,  10 },   // Héroe 1
+    	    { 10, 175 },   // Héroe 2  (155 + 20 de margen)
+    	    {190,  10 },   // Héroe 3
+    	    {190, 175 },   // Héroe 4
+    	    { 10, 340 }    // Héroe 5  (solo si hay 5 héroes; cabe en ALTO=420 ajustado)
+    	};
 
-    private static final Dimension TAM_PANEL_HEROE   = new Dimension(160, 130);
-    private static final Dimension TAM_PANEL_ENEMIGO = new Dimension(155, 110);
+    	private static final int[][] POS_ENEMIGOS = {
+    	    {660,  10  },
+    	    {660,  150 },
+    	    {660,  290 }
+    	};
+
+    private static final Dimension TAM_PANEL_HEROE   = new Dimension(170, 155);
+    private static final Dimension TAM_PANEL_ENEMIGO = new Dimension(170, 130);
 
     // ─────────────────────────────────────────────────────────────────────────
 

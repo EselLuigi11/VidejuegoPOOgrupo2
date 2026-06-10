@@ -228,29 +228,45 @@ public class OrquestadorF {
 		resolverFinDeBatalla(log);
 	}
 
+	// EN OrquestadorF.java
+	// REEMPLAZAR procesarTurnosAutomaticosEnemigos:
+
+	/**
+	 * Procesa UN SOLO turno de enemigo (el que corresponde según ordenTurnos).
+	 * Se llama recursivamente hasta que el turno actual sea de un Héroe o la batalla termine.
+	 * Garantiza alternancia estricta: héroe → enemigo → héroe → ...
+	 */
 	private void procesarTurnosAutomaticosEnemigos(StringBuilder log) {
-		actualizarOrdenTurnos();
+	    actualizarOrdenTurnos();
 
-		while (batallaActual.evaluarEstado() == EstadoBatalla.EN_CURSO
-				&& !ordenTurnos.isEmpty()
-				&& getPersonajeActual() instanceof Enemigo) {
+	    // Avanzamos de a un turno enemigo hasta topar con un héroe o fin de batalla
+	    while (batallaActual.evaluarEstado() == EstadoBatalla.EN_CURSO
+	            && !ordenTurnos.isEmpty()
+	            && getPersonajeActual() instanceof Enemigo) {
 
-			Enemigo enemigo = (Enemigo) getPersonajeActual();
+	        Enemigo enemigo = (Enemigo) getPersonajeActual();
 
-			if (enemigo != null && enemigo.estaVivo()) {
-				List<Heroe> heroesVivos = getHeroesVivos();
-				if (!heroesVivos.isEmpty()) {
-					log.append("-- Turno ").append(contadorTurnos)
-							.append(": ").append(enemigo.getNombre()).append(" --\n");
-					enemigo.EnemigoAtaca(heroesVivos);
-					log.append(enemigo.getNombre()).append(" ataca.\n");
-					contadorTurnos++;
-				}
-			}
+	        if (enemigo != null && enemigo.estaVivo()) {
+	            List<Heroe> heroesVivos = getHeroesVivos();
+	            if (!heroesVivos.isEmpty()) {
+	                log.append("-- Turno ").append(contadorTurnos)
+	                        .append(": ").append(enemigo.getNombre()).append(" --\n");
 
-			avanzarTurnoDesde(enemigo);
-			resolverFinDeBatalla(log);
-		}
+	                enemigo.EnemigoAtaca(heroesVivos);  // IA del enemigo — ataca a 1 héroe
+
+	                log.append(enemigo.getNombre()).append(" ataca.\n");
+	                contadorTurnos++;
+	            }
+	        }
+
+	        avanzarTurnoDesde(enemigo);
+
+	        // ── STOP: después de cada enemigo, si el próximo es un héroe, salimos.
+	        // Esto garantiza que el jugador pueda actuar antes del siguiente enemigo.
+	        if (getPersonajeActual() instanceof Heroe) {
+	            break;
+	        }
+	    }
 	}
 
 	//Funcion importante de logica para determinar el orden de entidad. 

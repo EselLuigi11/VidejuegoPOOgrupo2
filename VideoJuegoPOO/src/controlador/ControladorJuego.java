@@ -121,15 +121,48 @@ public class ControladorJuego {
 		// 3. GESTIÓN DEL INVENTARIO
 		// ==========================================
 		this.vistaBatalla.getPanelAcciones().getBtnUsarItem().addActionListener(e -> {
-			try {
-				// Aquí deberías evaluar si es el turno de un héroe antes de abrir
-				if (orquestador.getHeroeActual() == null) {
-					throw new IllegalStateException("No puedes usar objetos en el turno del enemigo.");
-				}
-				this.vistaInventario.setVisible(true);
-			} catch (Exception ex) {
-				JOptionPane.showMessageDialog(vistaBatalla, ex.getMessage(), "Acción Inválida", JOptionPane.WARNING_MESSAGE);
-			}
+		    try {
+		        Heroe heroeActivo = orquestador.getHeroeActual();
+		        if (heroeActivo == null) {
+		            throw new IllegalStateException("No puedes usar objetos en el turno del enemigo.");
+		        }
+
+		        List<modelo.Item> items = partida.getInventarioPartida().getItems();
+
+		        // Pasamos la lista real al inventario y lo abrimos
+		        vistaInventario.cargarItems(items);
+		        vistaInventario.setVisible(true);
+
+		        // Registramos listeners de "Usar" para cada botón recién creado
+		        List<javax.swing.JButton> botones = vistaInventario.getBotonesUsar();
+		        for (int i = 0; i < botones.size(); i++) {
+		            final int idx = i;
+		            // Limpiamos listeners anteriores para evitar acumulación (DRY)
+		            for (java.awt.event.ActionListener al : botones.get(idx).getActionListeners()) {
+		                botones.get(idx).removeActionListener(al);
+		            }
+		            botones.get(idx).addActionListener(evt -> {
+		                try {
+		                    modelo.Item itemElegido = partida.getInventarioPartida().getItems().get(idx);
+		                    modelo.Accion accion = orquestador.crearAccionUsarItem(heroeActivo, itemElegido);
+		                    String log = orquestador.procesarTurno(accion);
+		                    vistaBatalla.appendHistorial(log);
+
+		                    vistaInventario.setVisible(false);
+		                    actualizarBarrasPantalla();
+		                    comprobarProgresoJuego();
+		                } catch (Exception ex) {
+		                    javax.swing.JOptionPane.showMessageDialog(
+		                        vistaInventario, ex.getMessage(), "Error al usar ítem",
+		                        javax.swing.JOptionPane.ERROR_MESSAGE);
+		                }
+		            });
+		        }
+		    } catch (Exception ex) {
+		        javax.swing.JOptionPane.showMessageDialog(
+		            vistaBatalla, ex.getMessage(), "Acción Inválida",
+		            javax.swing.JOptionPane.WARNING_MESSAGE);
+		    }
 		});
 	}
 

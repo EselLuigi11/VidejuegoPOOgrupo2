@@ -18,7 +18,7 @@ public class Guerrero extends Heroe implements java.io.Serializable {
                 0, 0,       // mana, manaMax (el Guerrero no usa mana)
                 5, 150,     // probCrit, danoCrit
                 arma, armadura);
-        HabEspGuerrero habilidadEspecial = new HabEspGuerrero();
+        this.habilidadEspecial = new HabEspGuerrero();
  
         // ── Tabla de niveles del Guerrero ──────────────────────────
         // (vidaMax, ataque, defensa, velocidad, energiaMax, manaMax, probCrit, danoCrit)

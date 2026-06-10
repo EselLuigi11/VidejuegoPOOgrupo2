@@ -54,7 +54,7 @@ public class PanelPersonaje extends JPanel {
             BorderFactory.createLineBorder(COLOR_BORDE, 1, true),
             BorderFactory.createEmptyBorder(4, 8, 4, 8)
         ));
-        setPreferredSize(new Dimension(160, esHeroe() ? 130 : 110));
+        setPreferredSize(new Dimension(170, esHeroe() ? 155 : 130));
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets    = new Insets(2, 2, 2, 2);
@@ -168,7 +168,7 @@ public class PanelPersonaje extends JPanel {
                 "/img/" + nombre.toLowerCase().replace(" ", "_") + ".png");
             if (url != null) {
                 Image img = new ImageIcon(url).getImage()
-                    .getScaledInstance(48, 48, Image.SCALE_SMOOTH);
+                	.getScaledInstance(56, 56, Image.SCALE_SMOOTH);
                 lbl.setIcon(new ImageIcon(img));
             } else {
                 lbl.setText("[" + nombre.charAt(0) + "]");
