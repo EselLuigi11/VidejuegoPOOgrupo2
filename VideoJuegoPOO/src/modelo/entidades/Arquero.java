@@ -22,7 +22,7 @@ public class Arquero extends Heroe implements java.io.Serializable {
     public Arquero(String nombre, Arma arma, Armadura armadura) {
         super(nombre,
                 95, 95,      // vida, vidaMax
-                28, 10, 18,  // ataque, defensa, velocidad
+                23, 10, 18,  // ataque, defensa, velocidad
                 false,       // estaDefendiendo
                 0, 1,        // experiencia, nivel
                 100, 100,    // energia, energiaMax

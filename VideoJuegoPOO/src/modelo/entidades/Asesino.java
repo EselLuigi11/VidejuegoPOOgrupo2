@@ -13,7 +13,7 @@ public class Asesino extends Heroe implements java.io.Serializable {
     public Asesino(String nombre, Arma arma, Armadura armadura) {
         super(nombre,
                 80, 80,      // vida, vidaMax
-                35, 8, 20,   // ataque, defensa, velocidad
+                27, 8, 20,   // ataque, defensa, velocidad
                 false,       // estaDefendiendo
                 0, 1,        // experiencia, nivel
                 120, 120,    // energia, energiaMax
