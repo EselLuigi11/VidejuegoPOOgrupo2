@@ -102,6 +102,27 @@ public class PanelEstado extends JPanel {
         revalidate();
         repaint();
     }
+    
+    public PanelPersonaje buscarPanelHeroe(Heroe heroe) { /*animaciones de heroe*/
+
+        for (PanelPersonaje panel : panelesHeroes) {
+
+            if (panel.getEntidad() == heroe) {
+                return panel;
+            }
+        }
+
+        return null;
+    }
+    
+    public PanelPersonaje buscarPanelEnemigo(Enemigo enemigo) { /*animaciones de enemigo*/
+        for (PanelPersonaje p : panelesEnemigos) {
+            if (p.getEntidad() == enemigo) {
+                return p;
+            }
+        }
+        return null;
+    }
 
     /**
      * Refresca TODOS los paneles con el estado actual de sus entidades.

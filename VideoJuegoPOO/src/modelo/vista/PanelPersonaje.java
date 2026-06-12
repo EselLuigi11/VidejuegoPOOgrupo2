@@ -27,6 +27,8 @@ public class PanelPersonaje extends JPanel {
     private final JLabel        lblVidaTexto;
     private final JLabel        lblManaTexto; // null para Enemigos
     private final JLabel        lblImagen;
+    private ImageIcon spriteIdle; /*ambas agregadas con animaciones*/
+    private ImageIcon spriteAtaque;
 
     // ── Paleta ────────────────────────────────────────────────────────────────
     private static final Color COLOR_VIDA_OK    = new Color(50, 200, 70);
@@ -160,25 +162,69 @@ public class PanelPersonaje extends JPanel {
      * Intenta cargar /img/<nombre_en_minúsculas>.png.
      * Si no existe, muestra un placeholder de texto para no romper la UI.
      */
-    private JLabel cargarSprite(String nombre) {
+    private JLabel cargarSprite(String nombre) { /*cambiado todo para agregar animaciones*/
         JLabel lbl = new JLabel();
         lbl.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        System.out.println("CARPETA IMG = "
+                + getClass().getResource("/img/"));
+
         try {
-            java.net.URL url = getClass().getResource(
-                "/img/" + nombre.toLowerCase().replace(" ", "_") + ".png");
-            if (url != null) {
-                Image img = new ImageIcon(url).getImage()
-                	.getScaledInstance(56, 56, Image.SCALE_SMOOTH);
-                lbl.setIcon(new ImageIcon(img));
+            String base = nombre.toLowerCase().replace(" ", "_");
+
+            java.net.URL idleURL =
+                    getClass().getResource("/img/" + base + "_idle.png");
+
+            java.net.URL ataqueURL =
+                    getClass().getResource("/img/" + base + "_ataque.png");
+            
+            System.out.println("Entidad: " + nombre);
+            System.out.println("Buscando idle: /img/" + base + "_idle.png");
+            System.out.println("Buscando ataque: /img/" + base + "_ataque.png");
+            System.out.println("idleURL = " + idleURL);
+            System.out.println("ataqueURL = " + ataqueURL);
+
+            if (idleURL != null) {
+
+                Image idleImg = new ImageIcon(idleURL)
+                        .getImage()
+                        .getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+
+                spriteIdle = new ImageIcon(idleImg);
+
+                lbl.setIcon(spriteIdle);
+
+                if (ataqueURL != null) {
+                    Image atkImg = new ImageIcon(ataqueURL)
+                            .getImage()
+                            .getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+
+                    spriteAtaque = new ImageIcon(atkImg);
+                }
             } else {
                 lbl.setText("[" + nombre.charAt(0) + "]");
-                lbl.setForeground(Color.YELLOW);
-                lbl.setFont(new Font("Serif", Font.BOLD, 22));
             }
+
         } catch (Exception e) {
             lbl.setText("[?]");
-            lbl.setForeground(Color.ORANGE);
         }
+
         return lbl;
+    }
+    
+    public void mostrarAtaque() { /*agregado con las animaciones*/
+
+        if (spriteAtaque == null)
+            return;
+
+        lblImagen.setIcon(spriteAtaque);
+
+        javax.swing.Timer timer =
+                new javax.swing.Timer(400, e -> {
+                    lblImagen.setIcon(spriteIdle);
+                });
+
+        timer.setRepeats(false);
+        timer.start();
     }
 }
