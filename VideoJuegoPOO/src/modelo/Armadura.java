@@ -3,6 +3,7 @@ package modelo;
 import modelo.entidades.Heroe;
 
 public class Armadura extends Item {
+	private static final long serialVersionUID = 1L;
 	private int plusDefensa;
 	
 	public Armadura(String nombre, String descripcion, int defensa) {

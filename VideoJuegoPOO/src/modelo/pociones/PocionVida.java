@@ -4,6 +4,7 @@ import modelo.Pocion;
 import modelo.entidades.Heroe;
 
 public class PocionVida extends Pocion {
+	private static final long serialVersionUID = 1L;
 	private int cantidadCuracion;
 	
 	//Constructor

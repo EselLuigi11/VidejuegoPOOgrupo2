@@ -1,8 +1,13 @@
 package controlador;
 
 import javax.swing.JOptionPane;
+
+import java.util.ArrayList;
 import java.util.List;
 import modelo.Partida;
+import modelo.RepositorioPartida;
+import modelo.Batalla;
+import modelo.CatalogoBatalla;
 import modelo.Orquestador;
 import modelo.acciones.Atacar;
 import modelo.acciones.Defender;
@@ -19,13 +24,15 @@ public class ControladorJuego {
 	private VistaBatalla vistaBatalla;
 	private VistaInventario vistaInventario;
 	private int nivelActual = 1;
+	private RepositorioPartida repositorio;
 	
-	public ControladorJuego(Partida partida, Orquestador orquestador, VistaMenuPrincipal vistaMenu, VistaBatalla vistaBatalla, VistaInventario vistaInventario) {
+	public ControladorJuego(Partida partida, Orquestador orquestador, VistaMenuPrincipal vistaMenu, VistaBatalla vistaBatalla, VistaInventario vistaInventario, RepositorioPartida repositorio) {
 		this.partida = partida;
 		this.orquestador = orquestador;
 		this.vistaMenu = vistaMenu;
 		this.vistaBatalla = vistaBatalla;
 		this.vistaInventario = vistaInventario;
+		this.repositorio = new RepositorioPartida();
 	}
 
 	public void iniciar() {
@@ -46,6 +53,36 @@ public class ControladorJuego {
 			actualizarBarrasPantalla();
 		});
 
+		
+		this.vistaMenu.btnCargar.addActionListener(e -> {
+		    if (!repositorio.existeSave()) {
+		        JOptionPane.showMessageDialog(vistaMenu, "No hay ninguna partida guardada.", "Sin guardado", JOptionPane.WARNING_MESSAGE);
+		        return;
+		    }
+		    //Si hay partida guardada, la cargamos y reconstruimos el estado del juego
+		    Partida cargada = repositorio.cargar();
+		    //Llama a la funcion cargar() del repositorio. Que devuelve un objeto Partida reconstruido a partir del archivo .dat, o null si hubo error.
+		    if (cargada != null) {
+		        this.partida = cargada;
+		        this.nivelActual = cargada.getNivel();
+		        // Reconstruir el orquestador con la partida cargada
+		        Batalla batallaRetomada = CatalogoBatalla.getInstance()
+		            .construirBatalla(nivelActual, new ArrayList<>(partida.getGrupo().getHeroesVivos()));
+		        this.orquestador = new Orquestador(batallaRetomada, partida);
+		        
+		        vistaMenu.setVisible(false);
+		        vistaBatalla.setVisible(true);
+		        vistaBatalla.getPanelEstado().inicializar(
+		            partida.getGrupo().getHeroesVivos(),
+		            orquestador.getBatallaActual().getEnemigos()
+		        );
+		        actualizarBarrasPantalla();
+		        JOptionPane.showMessageDialog(vistaBatalla, 
+		            "Partida cargada. Último guardado: " + partida.getFechaGuardadoFormateada(),
+		            "Partida Cargada", JOptionPane.INFORMATION_MESSAGE);
+		    }
+		});
+		
 		this.vistaMenu.btnSalir.addActionListener(e -> {
 			System.exit(0); 
 		});

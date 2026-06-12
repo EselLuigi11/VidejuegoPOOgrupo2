@@ -14,6 +14,7 @@ import java.util.Map;
 
 
 public class Heroe extends Entidad {
+	private static final long serialVersionUID = 1L;
 	
 	private int experiencia;
 	private int nivel;

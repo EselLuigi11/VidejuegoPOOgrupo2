@@ -4,6 +4,7 @@ import modelo.entidades.Asesino;
 import modelo.entidades.Enemigo;
 
 public class HabEspAsesino {
+	private static final long serialVersionUID = 1L;
 	private String nombre = "Puñalada Certera";
 	private int costoEnergia = 45;
 	private double multiplicadorDano = 2.4;

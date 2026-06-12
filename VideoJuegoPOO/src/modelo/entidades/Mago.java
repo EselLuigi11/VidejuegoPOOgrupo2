@@ -5,6 +5,7 @@ import modelo.Armadura;
 import modelo.habilidades.HabEspMago;
 
 public class Mago extends Heroe {
+	private static final long serialVersionUID = 1L;
 
     private int poderMagico; // Bonus al daño de habilidades mágicas
     private HabEspMago habilidadEspecial; // Habilidad exclusiva del Mago

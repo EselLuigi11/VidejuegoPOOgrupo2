@@ -3,6 +3,7 @@ package modelo;
 import modelo.entidades.Heroe;
 
 public class Arma extends Item {
+	private static final long serialVersionUID = 1L;
 	private int plusdano;
 	
 	public Arma(String nombre, String descripcion, int dano) {

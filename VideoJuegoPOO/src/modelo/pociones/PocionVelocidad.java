@@ -4,6 +4,7 @@ import modelo.Pocion;
 import modelo.entidades.Heroe;
 
 public class PocionVelocidad extends Pocion {
+	private static final long serialVersionUID = 1L;
 	private int aumentoVelocidad;
 	
 	public PocionVelocidad(String nombre, String descripcion, int aumentoVelocidad) {

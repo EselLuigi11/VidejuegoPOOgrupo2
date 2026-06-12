@@ -3,6 +3,7 @@ package modelo;
 import modelo.entidades.Heroe;
 
 public abstract class Item {
+	private static final long serialVersionUID = 1L;
 	private String nombre;
 	private String descripcion;
 

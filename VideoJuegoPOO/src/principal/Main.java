@@ -6,6 +6,7 @@ import modelo.Batalla;
 import modelo.CatalogoBatalla;
 import modelo.Orquestador;
 import modelo.Partida;
+import modelo.RepositorioPartida;
 import modelo.entidades.*;
 import modelo.vista.*;
 
@@ -34,7 +35,7 @@ public class Main {
 
         batalla.setVisible(false);
         inventario.setVisible(false);
-
-        new ControladorJuego(partida, orquestador, menu, batalla, inventario).iniciar();
+        RepositorioPartida repositorio = new RepositorioPartida();
+        new ControladorJuego(partida, orquestador, menu, batalla, inventario, repositorio).iniciar();
     }
 }

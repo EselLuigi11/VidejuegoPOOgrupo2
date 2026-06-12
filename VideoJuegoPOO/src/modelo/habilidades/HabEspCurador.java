@@ -6,6 +6,7 @@ import modelo.entidades.Curador;
 import modelo.entidades.Heroe;
 
 public class HabEspCurador {
+	private static final long serialVersionUID = 1L;
 	private String nombre = "Sanación Grupal";
 	private int costoMana = 35;
 	private int curacionBase = 30;

@@ -7,6 +7,7 @@ import modelo.entidades.Curador;
 import modelo.entidades.Heroe;
 
 public class Party {
+	private static final long serialVersionUID = 1L;
 
     private String nombreParty;
     private List<Heroe> party;

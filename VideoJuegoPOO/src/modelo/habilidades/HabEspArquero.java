@@ -4,6 +4,7 @@ import modelo.entidades.Arquero;
 import modelo.entidades.Enemigo;
 
 public class HabEspArquero {
+	private static final long serialVersionUID = 1L;
 	private String nombre = "Disparo Preciso";
 	private int costoEnergia = 30;
 	private double multiplicadorDano = 1.8;

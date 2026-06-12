@@ -1,6 +1,7 @@
 package modelo;
 
 public class Entidad {
+	private static final long serialVersionUID = 1L;
 	private String nombre;
 	private int vida;
 	private int vidaMax;

@@ -1,6 +1,7 @@
 package modelo.entidades;
 
 public class StatsNivel {
+	private static final long serialVersionUID = 1L;
     private int vidaMax;
     private int ataque;
     private int defensa;

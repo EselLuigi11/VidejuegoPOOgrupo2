@@ -4,6 +4,7 @@ import modelo.Pocion;
 import modelo.entidades.Heroe;
 
 public class PocionMana extends Pocion {
+	private static final long serialVersionUID = 1L;
 	private int manaRecuperado;
 	
 	public PocionMana(String nombre, String descripcion, int manaRecuperado) {

@@ -6,6 +6,7 @@ import java.util.List;
 import modelo.entidades.Heroe;
 
 public class Inventario { 
+	private static final long serialVersionUID = 1L;
 	private List<Item> items;
     private int capacidad;
 

@@ -1,5 +1,8 @@
 package modelo;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import modelo.pociones.PocionVida;
 
 public class Partida implements java.io.Serializable {
@@ -9,6 +12,8 @@ public class Partida implements java.io.Serializable {
 	private Party grupo;
 	private Inventario inventarioPartida;
 	private int nivel; // AGREGADO: Para solucionar el error del Repositorio
+	private LocalDateTime fechaGuardado;
+
 	
 	public Partida() {
 		this.estado = true;
@@ -27,6 +32,17 @@ public class Partida implements java.io.Serializable {
 			System.out.println("Game Over");
 		}
 	}
+	
+	public void actualizarFechaGuardado() {
+		this.fechaGuardado = LocalDateTime.now();
+	}
+	public String getFechaGuardadoFormateada() {
+		if (fechaGuardado == null) 
+			return "Sin guardar";
+		return fechaGuardado.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+		// Formato: día/mes/año hora:minuto
+	}
+
 	
 	// MÉTODOS AGREGADOS PARA ARREGLAR LOS ERRORES
 	public int getNivel() {
