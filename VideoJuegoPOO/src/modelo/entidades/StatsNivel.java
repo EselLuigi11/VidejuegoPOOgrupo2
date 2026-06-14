@@ -1,6 +1,6 @@
 package modelo.entidades;
 
-public class StatsNivel {
+public class StatsNivel implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
     private int vidaMax;
     private int ataque;

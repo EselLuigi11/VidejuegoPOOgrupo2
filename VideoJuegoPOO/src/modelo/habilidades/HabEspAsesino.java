@@ -3,7 +3,7 @@ package modelo.habilidades;
 import modelo.entidades.Asesino;
 import modelo.entidades.Enemigo;
 
-public class HabEspAsesino {
+public class HabEspAsesino implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String nombre = "Puñalada Certera";
 	private int costoEnergia = 45;

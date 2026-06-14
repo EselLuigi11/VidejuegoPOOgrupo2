@@ -3,7 +3,7 @@ package modelo.habilidades;
 import modelo.entidades.Enemigo;
 import modelo.entidades.Guerrero;
 
-public class HabEspGuerrero {
+public class HabEspGuerrero implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String nombre = "Golpe Protector"; //Golpe que da plus defensa y daño al mismo tiempo
 	private int costoEnergia = 35;

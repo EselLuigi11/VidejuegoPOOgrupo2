@@ -53,6 +53,10 @@ public class Partida implements java.io.Serializable {
 		this.nivel++;
 	}
 
+	public void setNivel(int nivel) {
+		this.nivel = nivel;
+	}
+
 	// GETTERS Y SETTERS ORIGINALES
 	public Inventario getInventarioPartida() { 
 		return inventarioPartida; 

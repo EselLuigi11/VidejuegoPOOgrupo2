@@ -6,7 +6,7 @@ import java.util.List;
 import modelo.entidades.Curador;
 import modelo.entidades.Heroe;
 
-public class Party {
+public class Party implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 
     private String nombreParty;

@@ -32,7 +32,7 @@ public class ControladorJuego {
 		this.vistaMenu = vistaMenu;
 		this.vistaBatalla = vistaBatalla;
 		this.vistaInventario = vistaInventario;
-		this.repositorio = new RepositorioPartida();
+		this.repositorio = repositorio;
 	}
 
 	public void iniciar() {
@@ -85,6 +85,26 @@ public class ControladorJuego {
 		
 		this.vistaMenu.btnSalir.addActionListener(e -> {
 			System.exit(0); 
+		});
+
+		this.vistaBatalla.getPanelAcciones().getBtnGuardarPartida().addActionListener(e -> {
+			partida.setNivel(nivelActual);
+			boolean guardada = repositorio.guardar(partida);
+			if (guardada) {
+				JOptionPane.showMessageDialog(
+					vistaBatalla,
+					"Partida guardada. Podés retomarla desde Cargar Partida.",
+					"Partida Guardada",
+					JOptionPane.INFORMATION_MESSAGE
+				);
+			} else {
+				JOptionPane.showMessageDialog(
+					vistaBatalla,
+					"No se pudo guardar la partida.",
+					"Error al guardar",
+					JOptionPane.ERROR_MESSAGE
+				);
+			}
 		});
 		
 		// ==========================================
@@ -228,6 +248,7 @@ public class ControladorJuego {
 	private void comprobarProgresoJuego() {
 		if (orquestador.getEnemigosVivos().isEmpty()) {
 			nivelActual++;
+			partida.setNivel(nivelActual);
 			
 			// Curamos a la party mediante métodos propios (Encapsulamiento)
 			for (Heroe h : partida.getGrupo().getHeroesVivos()) {

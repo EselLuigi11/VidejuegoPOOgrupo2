@@ -5,7 +5,7 @@ import java.util.List;
 
 import modelo.entidades.Heroe;
 
-public class Inventario { 
+public class Inventario implements java.io.Serializable { 
 	private static final long serialVersionUID = 1L;
 	private List<Item> items;
     private int capacidad;

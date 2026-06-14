@@ -1,6 +1,6 @@
 package modelo;
 
-public class Entidad {
+public class Entidad implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String nombre;
 	private int vida;

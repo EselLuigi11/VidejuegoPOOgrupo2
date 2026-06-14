@@ -5,7 +5,7 @@ import java.util.List;
 import modelo.entidades.Curador;
 import modelo.entidades.Heroe;
 
-public class HabEspCurador {
+public class HabEspCurador implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String nombre = "Sanación Grupal";
 	private int costoMana = 35;
