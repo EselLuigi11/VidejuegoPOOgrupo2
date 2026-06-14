@@ -220,12 +220,14 @@ public class ControladorJuego {
 	private void actualizarBarrasPantalla() {
 		// Principio de Delegación: El Controlador ordena refrescar, la Vista sabe cómo hacerlo internamente.
 		this.vistaBatalla.getPanelEstado().refreshTodos();
+		// Resaltar al personaje actual
+		modelo.Entidad activo = orquestador.getPersonajeActual();
+		this.vistaBatalla.getPanelEstado().refrescarActivo(activo);
 	}
 
 	private void comprobarProgresoJuego() {
 		if (orquestador.getEnemigosVivos().isEmpty()) {
 			nivelActual++;
-			JOptionPane.showMessageDialog(vistaBatalla, "¡Victoria! Avanzando al Nivel " + nivelActual, "Fase Completada", JOptionPane.INFORMATION_MESSAGE);
 			
 			// Curamos a la party mediante métodos propios (Encapsulamiento)
 			for (Heroe h : partida.getGrupo().getHeroesVivos()) {
@@ -234,9 +236,10 @@ public class ControladorJuego {
 			
 			// Solicitamos la nueva batalla al Catálogo
 			String msgCarga = orquestador.iniciarBatalla(nivelActual);
-			this.vistaBatalla.appendHistorial("\n--- " + msgCarga + " ---");
 
 			if (orquestador.getBatallaActual() != null) {
+				JOptionPane.showMessageDialog(vistaBatalla, "¡Victoria! Avanzando al Nivel " + nivelActual, "Fase Completada", JOptionPane.INFORMATION_MESSAGE);
+				this.vistaBatalla.appendHistorial("\n--- " + msgCarga + " ---");
 				// RE-INICIALIZAMOS la vista dinámica porque los enemigos cambiaron
 				this.vistaBatalla.getPanelEstado().inicializar(
 					partida.getGrupo().getHeroesVivos(), 
@@ -244,7 +247,7 @@ public class ControladorJuego {
 				);
 				actualizarBarrasPantalla();
 			} else {
-				JOptionPane.showMessageDialog(vistaBatalla, "¡Felicitaciones! Has completado todos los niveles.", "Fin de la Aventura", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(vistaBatalla, "¡Ganaste!", "Fase Completada", JOptionPane.INFORMATION_MESSAGE);
 				System.exit(0);
 			}
 		}

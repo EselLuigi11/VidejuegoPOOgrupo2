@@ -133,6 +133,19 @@ public class PanelEstado extends JPanel {
         for (PanelPersonaje p : panelesEnemigos) p.refresh();
     }
 
+    /**
+     * Resalta el panel correspondiente a la entidad que tiene el turno actual.
+     * @param entidadActiva La entidad cuyo turno está en curso (puede ser null).
+     */
+    public void refrescarActivo(modelo.Entidad entidadActiva) {
+        for (PanelPersonaje p : panelesHeroes) {
+            p.setActivo(p.getEntidad() == entidadActiva);
+        }
+        for (PanelPersonaje p : panelesEnemigos) {
+            p.setActivo(p.getEntidad() == entidadActiva);
+        }
+    }
+
     // ── Getters de lista (para selección de objetivo en el Controlador) ───────
 
     /** Paneles de los héroes en el orden en que fueron registrados. */

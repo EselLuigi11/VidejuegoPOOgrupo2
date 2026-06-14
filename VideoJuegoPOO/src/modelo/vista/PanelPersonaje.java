@@ -36,6 +36,7 @@ public class PanelPersonaje extends JPanel {
     private static final Color COLOR_MANA       = new Color(60, 120, 220);
     private static final Color COLOR_BG         = new Color(15, 15, 30, 210);
     private static final Color COLOR_BORDE      = new Color(90, 90, 150);
+    private static final Color COLOR_ACTIVO     = new Color(255, 215, 0); // Dorado para el turno activo
     private static final Font  FUENTE_NOMBRE    = new Font("Serif",      Font.BOLD,  13);
     private static final Font  FUENTE_STATS     = new Font("Monospaced", Font.PLAIN, 10);
 
@@ -226,5 +227,22 @@ public class PanelPersonaje extends JPanel {
 
         timer.setRepeats(false);
         timer.start();
+    }
+
+    /**
+     * Resalta visualmente el panel si la entidad es la que tiene el turno actual.
+     */
+    public void setActivo(boolean activo) {
+        if (activo) {
+            setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(COLOR_ACTIVO, 2, true),
+                BorderFactory.createEmptyBorder(3, 7, 3, 7)
+            ));
+        } else {
+            setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(COLOR_BORDE, 1, true),
+                BorderFactory.createEmptyBorder(4, 8, 4, 8)
+            ));
+        }
     }
 }
