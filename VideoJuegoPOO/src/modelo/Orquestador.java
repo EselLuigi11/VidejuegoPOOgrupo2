@@ -76,7 +76,10 @@ public class Orquestador {
 
         Batalla nueva = CatalogoBatalla.getInstance()
                 .construirBatalla(numeroBatalla, heroesVivos);
-        if (nueva == null) return "No existe la batalla " + numeroBatalla + ".";
+        if (nueva == null) {
+            setBatallaActual(null);
+            return "No existe la batalla " + numeroBatalla + ".";
+        }
 
         setBatallaActual(nueva);
         this.numeroBatallaActual = numeroBatalla;

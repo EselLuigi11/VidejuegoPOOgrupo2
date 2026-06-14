@@ -247,7 +247,7 @@ public class ControladorJuego {
 				);
 				actualizarBarrasPantalla();
 			} else {
-				JOptionPane.showMessageDialog(vistaBatalla, "¡Ganaste!", "Fase Completada", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(vistaBatalla, "¡Ganaste el juego!", "Juego Completado", JOptionPane.INFORMATION_MESSAGE);
 				System.exit(0);
 			}
 		}
