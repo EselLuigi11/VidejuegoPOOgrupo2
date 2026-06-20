@@ -55,8 +55,8 @@ public class RepositorioPartida {
         // try-with-resources: abre los "streams" de escritura y los cierra automáticamente
         // al terminar el bloque, aunque haya un error. Evita dejar archivos abiertos.
         //
-        // FileOutputStream: abre (o crea) el archivo físico para escribir bytes.
-        // ObjectOutputStream: se apoya en FileOutputStream y sabe cómo convertir
+        // FileOutputStream fos: abre (o crea) el archivo físico para escribir bytes.
+        // ObjectOutputStream oos: se apoya en FileOutputStream y sabe cómo convertir
         //                     un objeto Java en bytes (serialización).
         try (FileOutputStream fos = new FileOutputStream(ARCHIVO_GUARDADO);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
