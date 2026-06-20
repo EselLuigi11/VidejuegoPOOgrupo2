@@ -107,7 +107,7 @@ public class Batalla {
 					} else {
 						arma = new Arma("Arma Simple", "Botín básico.", 6);
 					}
-					h.setArma(arma);
+					h.equiparArma(arma);
 					System.out.println(h.getNombre() + " equipó: " + arma.getNombre());
 				}
 				inv.agregarItem(new PocionVida("Poción de Vida", "Restaura 50 HP.", 50));
