@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Random;
+import modelo.Arma;
+import modelo.Armadura;
+import modelo.Item;
 import modelo.Partida;
 import modelo.RepositorioPartida;
 import modelo.Batalla;
@@ -19,7 +21,6 @@ import modelo.entidades.Asesino;
 import modelo.entidades.Enemigo;
 import modelo.entidades.Guerrero;
 import modelo.entidades.Heroe;
-import modelo.pociones.PocionVida;
 import vista.PanelPersonaje;
 import vista.VistaBatalla;
 import vista.VistaInventario;
@@ -53,16 +54,12 @@ public class ControladorJuego {
 			this.vistaMenu.setVisible(false);
 			this.vistaBatalla.setVisible(true);
 
-			// MODIFICADO: PanelEstado ya no se arma con paneles hardcodeados
-			// ("Guerrero" / "Enemigo" fijos). Ahora se inicializa dinámicamente
-			// iterando las listas reales de héroes y enemigos del modelo.
 			this.vistaBatalla.getPanelEstado().inicializar(
 				partida.getGrupo().getHeroesVivos(),
 				orquestador.getBatallaActual().getEnemigos()
 			);
 			actualizarBarrasPantalla();
 		});
-
 
 		this.vistaMenu.btnCargar.addActionListener(e -> {
 		    if (!repositorio.existeSave()) {
@@ -73,10 +70,6 @@ public class ControladorJuego {
 		    if (cargada != null) {
 		        this.partida = cargada;
 		        this.nivelActual = cargada.getNivel();
-		        // MODIFICADO: CatalogoBatalla.construirBatalla() ahora devuelve
-		        // enemigos CLONADOS (ver Enemigo.java y CatalogoBatalla.java),
-		        // así una batalla retomada nunca arrastra enemigos muertos/dañados
-		        // de una ejecución anterior.
 		        Batalla batallaRetomada = CatalogoBatalla.getInstance()
 		            .construirBatalla(nivelActual, new ArrayList<>(partida.getGrupo().getHeroesVivos()));
 		        this.orquestador = new Orquestador(batallaRetomada, partida);
@@ -133,8 +126,6 @@ public class ControladorJuego {
 					throw new IllegalStateException("No hay rivales en el campo de batalla.");
 				}
 
-				// MODIFICADO: selección real de objetivo vía JOptionPane en
-				// vez de tomar siempre enemigosVivos.get(0) a ciegas.
 				String[] nombresEnemigos = enemigosVivos.stream().map(Enemigo::getNombre).toArray(String[]::new);
 				String seleccion = (String) JOptionPane.showInputDialog(
 						vistaBatalla,
@@ -153,16 +144,11 @@ public class ControladorJuego {
 						.findFirst()
 						.orElse(enemigosVivos.get(0));
 
-
-				/*Hace que se activen las animaciones*/
 				PanelPersonaje panelAtacante =
-				        vistaBatalla.getPanelEstado()
-				                    .buscarPanelHeroe(heroeActivo);
-
+				        vistaBatalla.getPanelEstado().buscarPanelHeroe(heroeActivo);
 				if (panelAtacante != null) {
 				    panelAtacante.mostrarAtaque();
 				}
-
 
 				Map<Heroe, Integer> nivelesAntes = obtenerNivelesActuales();
 				Atacar ataque = new Atacar(heroeActivo, enemigoObjetivo);
@@ -212,7 +198,6 @@ public class ControladorJuego {
 
 				Enemigo objetivo = null;
 
-				// Guerrero, Arquero y Asesino necesitan seleccionar un objetivo enemigo
 				if (heroeActivo instanceof Guerrero
 						|| heroeActivo instanceof Arquero
 						|| heroeActivo instanceof Asesino) {
@@ -243,9 +228,6 @@ public class ControladorJuego {
 				}
 
 				Map<Heroe, Integer> nivelesAntes = obtenerNivelesActuales();
-				// NOTA: la firma de procesarHabilidad() en el Orquestador no
-				// cambió desde afuera; internamente ahora delega en
-				// heroe.usarHabilidadEspecial(...) en vez de un if/instanceof.
 				String logBatalla = orquestador.procesarHabilidad(heroeActivo, objetivo);
 				registrarAccionEnHistorial("", logBatalla);
 				actualizarBarrasPantalla();
@@ -282,9 +264,6 @@ public class ControladorJuego {
 		                try {
 		                    modelo.Item itemElegido = partida.getInventarioPartida().getItems().get(idx);
 		                    Map<Heroe, Integer> nivelesAntes = obtenerNivelesActuales();
-		                    // NOTA: si el ítem es Arma o Armadura, item.usar(heroe)
-		                    // ahora delega en heroe.equiparArma()/equiparArmadura()
-		                    // (ver Arma.java / Armadura.java), no muta stats directo.
 		                    modelo.Accion accion = orquestador.crearAccionUsarItem(heroeActivo, itemElegido);
 		                    String log = orquestador.procesarTurno(accion);
 		                    String msjAccion = heroeActivo.getNombre() + " usa el ítem " + itemElegido.getNombre() + ".";
@@ -310,8 +289,6 @@ public class ControladorJuego {
 
 		// ==========================================
 		// 5. GESTIÓN DEL BOTÓN "VER STATS"
-		// NUEVO: corrección "Interfaz #2" del PDF — pantalla de estadísticas
-		// con desglose base + bonus de equipamiento.
 		// ==========================================
 		this.vistaBatalla.getPanelAcciones().getBtnVerStats().addActionListener(e -> {
 			try {
@@ -338,7 +315,6 @@ public class ControladorJuego {
 					.findFirst()
 					.orElse(heroesVivos.get(0));
 
-				// Cohesión POO: el texto lo arma el modelo (Heroe), el Controlador solo lo muestra.
 				JOptionPane.showMessageDialog(
 					vistaBatalla,
 					heroeElegido.getResumenEstadisticas(),
@@ -353,9 +329,6 @@ public class ControladorJuego {
 
 		// ==========================================
 		// 6. GESTIÓN DEL BOTÓN "VER EQUIPO"
-		// NUEVO: corrección "Interfaz #3" del PDF — pantalla para ver el
-		// equipamiento (arma/armadura) de cada héroe. Mismo patrón que
-		// "Ver Stats": JOptionPane + texto armado por el modelo (Heroe).
 		// ==========================================
 		this.vistaBatalla.getPanelAcciones().getBtnVerEquipo().addActionListener(e -> {
 			try {
@@ -382,8 +355,6 @@ public class ControladorJuego {
 					.findFirst()
 					.orElse(heroesVivos.get(0));
 
-				// Cohesión POO: Heroe.getResumenEquipamiento() arma su propio
-				// texto (arma, armadura, bonus); el Controlador solo lo muestra.
 				JOptionPane.showMessageDialog(
 					vistaBatalla,
 					heroeElegido.getResumenEquipamiento(),
@@ -397,20 +368,13 @@ public class ControladorJuego {
 		});
 	}
 
-	// ── Métodos de Refactorización POO ────────────────────────────────────────
+	// ── Métodos internos ──────────────────────────────────────────────────────
 
 	private void actualizarBarrasPantalla() {
-		// Principio DRY: único punto que sincroniza toda la interfaz tras cada turno.
 		this.vistaBatalla.getPanelEstado().refreshTodos();
 		modelo.Entidad activo = orquestador.getPersonajeActual();
 		this.vistaBatalla.getPanelEstado().refrescarActivo(activo);
-
-		// NUEVO: corrección "Interfaz #1" del PDF — sincroniza el indicador
-		// visual de orden de turnos en cada actualización.
 		this.vistaBatalla.getPanelEstado().actualizarOrdenTurnos(orquestador.getOrdenTurnos());
-
-		// MODIFICADO: fix de artefactos visuales — limpia restos de
-		// JOptionPane que quedaban pegados sobre los paneles de personajes.
 		this.vistaBatalla.repintarCompleto();
 	}
 
@@ -437,21 +401,15 @@ public class ControladorJuego {
 	private void comprobarProgresoJuego() {
 		if (orquestador.getBatallaActual() == null || orquestador.getBatallaActual().getEnemigosVivos().isEmpty()) {
 
-			// NUEVO: resumen de recompensas (XP total + loot simulado) pedido
-			// en la corrección de transición de nivel.
 			String resumenRecompensas = generarResumenRecompensas();
 
 			nivelActual++;
 			partida.setNivel(nivelActual);
 
-			// Encapsulamiento: Heroe.restaurarStatusCompleto() cura vida/maná
-			// post-batalla, en vez de tocar los campos desde el Controlador.
 			for (Heroe h : partida.getGrupo().getHeroesVivos()) {
 				h.restaurarStatusCompleto();
 			}
 
-			// MODIFICADO: CatalogoBatalla (Singleton) ahora devuelve enemigos
-			// clonados frescos para el siguiente nivel.
 			String msgCarga = orquestador.iniciarBatalla(nivelActual);
 
 			if (orquestador.getBatallaActual() != null) {
@@ -462,8 +420,6 @@ public class ControladorJuego {
 					JOptionPane.INFORMATION_MESSAGE
 				);
 				this.vistaBatalla.appendHistorial("\n--- " + msgCarga + " ---");
-				// MODIFICADO: re-inicializa la vista dinámica porque los
-				// enemigos del nuevo nivel son instancias distintas.
 				this.vistaBatalla.getPanelEstado().inicializar(
 					partida.getGrupo().getHeroesVivos(),
 					orquestador.getBatallaActual().getEnemigos()
@@ -480,33 +436,40 @@ public class ControladorJuego {
 			}
 		}
 
-		if (orquestador.getBatallaActual() == null || orquestador.getBatallaActual().getHeroesVivos().isEmpty() || !partida.isEstado()) {
+		if (orquestador.getBatallaActual() == null
+				|| orquestador.getBatallaActual().getHeroesVivos().isEmpty()
+				|| !partida.isEstado()) {
 			JOptionPane.showMessageDialog(vistaBatalla, "Tu equipo ha caído en combate.", "Game Over", JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		}
 	}
 
-	// NUEVO: cálculo de recompensas de victoria (XP total + loot simulado).
+	/**
+	 * Construye el texto de recompensas usando la lista real que entregó
+	 * el Orquestador (sin inventar ítems aleatorios).
+	 * Muestra: XP total + cada ítem con su stat relevante.
+	 */
 	private String generarResumenRecompensas() {
 		Batalla batallaGanada = orquestador.getBatallaActual();
 		int expTotal = (batallaGanada != null) ? batallaGanada.getExperienciaTotalOtorgada() : 0;
 
-		Random rand = new Random();
-		int cantidadDrops = 1 + rand.nextInt(2);
-		StringBuilder loot = new StringBuilder();
+		List<Item> recompensas = orquestador.getUltimasRecompensas();
 
-		for (int i = 0; i < cantidadDrops; i++) {
-			int curacion = 30 + rand.nextInt(50);
-			PocionVida pocion = new PocionVida(
-				"Poción de Vida", "Restaura " + curacion + " HP.", curacion
-			);
-			partida.getInventarioPartida().agregarItem(pocion);
-			loot.append("  • ").append(pocion.getNombre())
-				.append(" (+").append(curacion).append(" HP)\n");
+		StringBuilder loot = new StringBuilder();
+		for (Item item : recompensas) {
+			loot.append("  • ").append(item.getNombre());
+			if (item instanceof Armadura) {
+				loot.append("  (+").append(((Armadura) item).getplusDefensa()).append(" DEF)");
+			} else if (item instanceof Arma) {
+				loot.append("  (+").append(((Arma) item).getPlusDano()).append(" ATQ)");
+			}
+			loot.append("\n");
 		}
 
-		return "Experiencia obtenida: +" + expTotal + " XP\n"
-			+ "Botín recibido:\n" + loot.toString().stripTrailing();
+		String lootStr = loot.toString().stripTrailing();
+		if (lootStr.isEmpty()) lootStr = "  (Sin botín)";
+
+		return "Experiencia obtenida: +" + expTotal + " XP\nBotín recibido:\n" + lootStr;
 	}
 
 	private void registrarAccionEnHistorial(String mensajeAccion, String logOrquestador) {
