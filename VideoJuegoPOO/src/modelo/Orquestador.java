@@ -7,18 +7,8 @@ import java.util.List;
 import modelo.acciones.Atacar;
 import modelo.acciones.Defender;
 import modelo.acciones.UsarItem;
-import modelo.entidades.Arquero;
-import modelo.entidades.Asesino;
-import modelo.entidades.Curador;
 import modelo.entidades.Enemigo;
-import modelo.entidades.Guerrero;
 import modelo.entidades.Heroe;
-import modelo.entidades.Mago;
-import modelo.habilidades.HabEspArquero;
-import modelo.habilidades.HabEspAsesino;
-import modelo.habilidades.HabEspCurador;
-import modelo.habilidades.HabEspGuerrero;
-import modelo.habilidades.HabEspMago;
 
 public class Orquestador {
 	private Batalla batallaActual;
@@ -28,8 +18,7 @@ public class Orquestador {
 	private int indiceTurnoActual;
 	private boolean resultadoProcesado;
 	private int numeroBatallaActual;
-	
-	// Constructor
+
 	public Orquestador(Batalla batallaActual, Partida partidaActual) {
 		this.batallaActual = batallaActual;
 		this.contadorTurnos = 0;
@@ -96,22 +85,13 @@ public class Orquestador {
 
 	public Entidad getPersonajeActual() {
 		actualizarOrdenTurnos();
-
-		if (ordenTurnos.isEmpty()) {
-			return null;
-		}
-
+		if (ordenTurnos.isEmpty()) return null;
 		return ordenTurnos.get(indiceTurnoActual);
 	}
 
 	public Heroe getHeroeActual() {
 		Entidad personajeActual = getPersonajeActual();
-
-		if (personajeActual instanceof Heroe) {
-			return (Heroe) personajeActual;
-		}
-
-		return null;
+		return (personajeActual instanceof Heroe) ? (Heroe) personajeActual : null;
 	}
 
 	public List<Entidad> getOrdenTurnos() {
@@ -147,14 +127,13 @@ public class Orquestador {
 		}
 		return new UsarItem(partidaActual, heroe, item);
 	}
-		
+
 	public String procesarHabilidad(Heroe heroeQueActua, Enemigo objetivo) {
 		StringBuilder log = new StringBuilder();
 
 		if (batallaActual == null) {
 			return "No hay una batalla activa.";
 		}
-
 		if (batallaActual.evaluarEstado() != EstadoBatalla.EN_CURSO) {
 			return resolverFinDeBatalla(log);
 		}
@@ -185,7 +164,9 @@ public class Orquestador {
 				.append(": ").append(heroe.getNombre()).append(" --\n");
 		heroe.setEstaDefendiendo(false);
 
-		String resultadoHab = ejecutarHabilidadStr(heroe, objetivo);
+		// Polimorfismo puro: el héroe concreto resuelve su propia habilidad.
+		String resultadoHab = heroe.usarHabilidadEspecial(
+				objetivo, batallaActual.getEnemigosVivos(), batallaActual.getHeroesVivos());
 		log.append(resultadoHab).append("\n");
 		contadorTurnos++;
 
@@ -196,27 +177,6 @@ public class Orquestador {
 		return log.toString();
 	}
 
-	private String ejecutarHabilidadStr(Heroe heroe, Enemigo objetivo) {
-		if (heroe instanceof Guerrero) {
-			HabEspGuerrero hab = ((Guerrero) heroe).getHabilidadEspecial();
-			return hab.ejecutar((Guerrero) heroe, objetivo);
-		} else if (heroe instanceof Arquero) {
-			HabEspArquero hab = ((Arquero) heroe).getHabilidadEspecial();
-			return hab.ejecutar((Arquero) heroe, objetivo);
-		} else if (heroe instanceof Asesino) {
-			HabEspAsesino hab = ((Asesino) heroe).getHabilidadEspecial();
-			return hab.ejecutar((Asesino) heroe, objetivo);
-		} else if (heroe instanceof Mago) {
-			HabEspMago hab = ((Mago) heroe).getHabilidadEspecial();
-			return hab.ejecutar((Mago) heroe, batallaActual.getEnemigosVivos());
-		} else if (heroe instanceof Curador) {
-			HabEspCurador hab = ((Curador) heroe).getHabilidadEspecial();
-			return hab.ejecutar((Curador) heroe, batallaActual.getHeroesVivos());
-		}
-		return heroe.getNombre() + " no tiene habilidad especial.";
-	}
-
-	// Procesa el siguiente turno respetando el orden global por velocidad.
 	public String procesarTurno(Accion accion) {
 		return procesarTurno(null, accion);
 	}
@@ -227,7 +187,6 @@ public class Orquestador {
 		if (batallaActual == null) {
 			return "No hay una batalla activa.";
 		}
-
 		if (batallaActual.evaluarEstado() != EstadoBatalla.EN_CURSO) {
 			return resolverFinDeBatalla(log);
 		}
@@ -282,47 +241,35 @@ public class Orquestador {
 		resolverFinDeBatalla(log);
 	}
 
-	// EN OrquestadorF.java
-	// REEMPLAZAR procesarTurnosAutomaticosEnemigos:
-
-	/**
-	 * Procesa UN SOLO turno de enemigo (el que corresponde según ordenTurnos).
-	 * Se llama recursivamente hasta que el turno actual sea de un Héroe o la batalla termine.
-	 * Garantiza alternancia estricta: héroe → enemigo → héroe → ...
-	 */
 	private void procesarTurnosAutomaticosEnemigos(StringBuilder log) {
-	    actualizarOrdenTurnos();
+		actualizarOrdenTurnos();
 
-	    // Avanzamos de a un turno enemigo hasta topar con un héroe o fin de batalla
-	    while (batallaActual.evaluarEstado() == EstadoBatalla.EN_CURSO
-	            && !ordenTurnos.isEmpty()
-	            && getPersonajeActual() instanceof Enemigo) {
+		while (batallaActual.evaluarEstado() == EstadoBatalla.EN_CURSO
+				&& !ordenTurnos.isEmpty()
+				&& getPersonajeActual() instanceof Enemigo) {
 
-	        Enemigo enemigo = (Enemigo) getPersonajeActual();
+			Enemigo enemigo = (Enemigo) getPersonajeActual();
 
-	        if (enemigo != null && enemigo.estaVivo()) {
-	            List<Heroe> heroesVivos = batallaActual.getHeroesVivos();
-	            if (!heroesVivos.isEmpty()) {
-	                log.append("-- Turno ").append(contadorTurnos)
-	                        .append(": ").append(enemigo.getNombre()).append(" --\n");
+			if (enemigo != null && enemigo.estaVivo()) {
+				List<Heroe> heroesVivos = batallaActual.getHeroesVivos();
+				if (!heroesVivos.isEmpty()) {
+					log.append("-- Turno ").append(contadorTurnos)
+							.append(": ").append(enemigo.getNombre()).append(" --\n");
 
-	                String mensajeAtaque = enemigo.EnemigoAtaca(heroesVivos);
-	                log.append(mensajeAtaque).append("\n\n");
-	                contadorTurnos++;
-	            }
-	        }
+					String mensajeAtaque = enemigo.EnemigoAtaca(heroesVivos);
+					log.append(mensajeAtaque).append("\n\n");
+					contadorTurnos++;
+				}
+			}
 
-	        avanzarTurnoDesde(enemigo);
+			avanzarTurnoDesde(enemigo);
 
-	        // ── STOP: después de cada enemigo, si el próximo es un héroe, salimos.
-	        // Esto garantiza que el jugador pueda actuar antes del siguiente enemigo.
-	        if (getPersonajeActual() instanceof Heroe) {
-	            break;
-	        }
-	    }
+			if (getPersonajeActual() instanceof Heroe) {
+				break;
+			}
+		}
 	}
 
-	//Funcion importante de logica para determinar el orden de entidad. 
 	private void actualizarOrdenTurnos() {
 		if (batallaActual == null) {
 			ordenTurnos = new ArrayList<>();
@@ -337,16 +284,11 @@ public class Orquestador {
 
 		List<Entidad> nuevoOrden = new ArrayList<>();
 		for (Heroe heroe : batallaActual.getHeroes()) {
-			if (heroe != null && heroe.estaVivo()) {
-				nuevoOrden.add(heroe);
-			}
+			if (heroe != null && heroe.estaVivo()) nuevoOrden.add(heroe);
 		}
 		for (Enemigo enemigo : batallaActual.getEnemigos()) {
-			if (enemigo != null && enemigo.estaVivo()) {
-				nuevoOrden.add(enemigo);
-			}
+			if (enemigo != null && enemigo.estaVivo()) nuevoOrden.add(enemigo);
 		}
-		// Ordenar por velocidad descendente (más rápido primero)
 		nuevoOrden.sort(Comparator.comparingInt(Entidad::getVelocidad).reversed());
 		ordenTurnos = nuevoOrden;
 
@@ -365,12 +307,10 @@ public class Orquestador {
 
 	private void avanzarTurnoDesde(Entidad personajeQueActuo) {
 		actualizarOrdenTurnos();
-
 		if (ordenTurnos.isEmpty()) {
 			indiceTurnoActual = 0;
 			return;
 		}
-
 		int indicePersonaje = ordenTurnos.indexOf(personajeQueActuo);
 		if (indicePersonaje >= 0) {
 			indiceTurnoActual = (indicePersonaje + 1) % ordenTurnos.size();
@@ -382,19 +322,17 @@ public class Orquestador {
 	private String resolverFinDeBatalla(StringBuilder log) {
 		EstadoBatalla estadoFinal = batallaActual.evaluarEstado();
 
-		if (estadoFinal == EstadoBatalla.EN_CURSO) {
+		if (estadoFinal == EstadoBatalla.EN_CURSO || resultadoProcesado) {
 			return log.toString();
 		}
-
-		if (resultadoProcesado) {
-			return log.toString();
-		}
-
 		resultadoProcesado = true;
 
 		if (estadoFinal == EstadoBatalla.VICTORIA) {
 			log.append("¡Los heroes han ganado la batalla!\n");
 			repartirExperiencia();
+			if (partidaActual != null) {
+				batallaActual.otorgarRecompensas(partidaActual.getInventarioPartida(), numeroBatallaActual);
+			}
 		} else if (estadoFinal == EstadoBatalla.DERROTA) {
 			log.append("Game Over. Los enemigos ganaron.\n");
 			if (partidaActual != null) {
@@ -407,7 +345,6 @@ public class Orquestador {
 
 	private void repartirExperiencia() {
 		if (batallaActual == null) return;
-
 		List<Heroe> heroesVivos = batallaActual.getHeroesVivos();
 		if (heroesVivos.isEmpty()) return;
 
@@ -417,10 +354,6 @@ public class Orquestador {
 					enemigo.otorgarExperiencia(heroe);
 				}
 			}
-		}
-
-		if (partidaActual != null) {
-			batallaActual.otorgarRecompensas(partidaActual.getInventarioPartida(), numeroBatallaActual);
 		}
 	}
 }
