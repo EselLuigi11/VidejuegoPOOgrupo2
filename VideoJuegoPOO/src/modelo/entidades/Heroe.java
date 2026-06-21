@@ -108,24 +108,13 @@ public abstract class Heroe extends Entidad {
 	// la nueva. El stat de ataque siempre refleja el equipo actual, nunca
 	// un acumulado histórico de todo lo que se usó alguna vez.
 	public void equiparArma(Arma nuevaArma) {
-		if (this.arma != null) {
-			aumentarAtaque(-this.arma.getPlusDano());
-		}
 		this.arma = nuevaArma;
-		if (nuevaArma != null) {
-			aumentarAtaque(nuevaArma.getPlusDano());
-		}
 	}
 
 	// MODIFICADO: misma lógica que equiparArma(), aplicada a defensa.
 	public void equiparArmadura(Armadura nuevaArmadura) {
-		if (this.armadura != null) {
-			aumentarDefensa(-this.armadura.getplusDefensa());
-		}
-		this.armadura = nuevaArmadura;
-		if (nuevaArmadura != null) {
-			aumentarDefensa(nuevaArmadura.getplusDefensa());
-		}
+		this.armadura= nuevaArmadura;
+		
 	}
 
 	// MODIFICADO: ahora delega en equiparArma(Arma) en vez de asignar el
@@ -156,6 +145,17 @@ public abstract class Heroe extends Entidad {
 		inventario.eliminarItem(armadura);
 		return msj + "equipa " + armadura.getNombre() + ".";
 	}
+	
+	
+	public int getDefensaTotal() {
+	    return getDefensa() +
+	           (armadura != null ? armadura.getplusDefensa() : 0);
+	}
+	
+	public int getAtaqueTotal() {
+	    return getAtaque() +
+	           (arma != null ? arma.getPlusDano() : 0);
+	}
 
 	public void restaurarStatusCompleto() {
 		this.setVida(this.getVidaMax());
@@ -174,12 +174,14 @@ public abstract class Heroe extends Entidad {
 		sb.append("──────────────────────────\n");
 		sb.append("Vida:      ").append(getVida()).append(" / ").append(getVidaMax()).append("\n");
 		sb.append("Mana:      ").append(mana).append(" / ").append(manaMax).append("\n");
-		sb.append("Ataque:    ").append(getAtaque() - bonusAtaque);
-		if (bonusAtaque > 0) sb.append(" (+").append(bonusAtaque).append(" arma)");
-		sb.append(" = ").append(getAtaque()).append("\n");
-		sb.append("Defensa:   ").append(getDefensa() - bonusDefensa);
-		if (bonusDefensa > 0) sb.append(" (+").append(bonusDefensa).append(" armadura)");
-		sb.append(" = ").append(getDefensa()).append("\n");
+		sb.append("Ataque:    ").append(getAtaque());
+		if (bonusAtaque > 0)
+		    sb.append(" (+").append(bonusAtaque).append(" arma)");
+		sb.append(" = ").append(getAtaque() + bonusAtaque).append("\n");;
+		sb.append("Defensa:   ").append(getDefensa());
+		if (bonusDefensa > 0)
+		    sb.append(" (+").append(bonusDefensa).append(" armadura)");
+		sb.append(" = ").append(getDefensa() + bonusDefensa).append("\n");;
 		sb.append("Velocidad: ").append(getVelocidad()).append("\n");
 		sb.append("Crítico:   ").append(probCrit).append("% (x").append(danoCrit / 100.0).append(")\n");
 		sb.append("Arma:      ").append(arma != null ? arma.getNombre() : "Ninguna").append("\n");
