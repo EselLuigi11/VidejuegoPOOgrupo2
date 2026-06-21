@@ -178,11 +178,13 @@ public class PanelPersonaje extends JPanel {
         lblImagen.setIcon(spriteAtaque);
         lblImagen.revalidate();
         lblImagen.repaint();
+        getParent().repaint();
 
         javax.swing.Timer timer = new javax.swing.Timer(400, e -> {
             lblImagen.setIcon(spriteIdle);
             lblImagen.revalidate();
             lblImagen.repaint();
+            getParent().repaint();
         });
         timer.setRepeats(false);
         timer.start();
