@@ -1,5 +1,7 @@
 package modelo;
 
+import modelo.entidades.Heroe;
+
 public class Entidad implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private String nombre;
@@ -26,7 +28,11 @@ public class Entidad implements java.io.Serializable {
 	public void recibirDano(int cantidadDano) {
 	    final double K = 100.0; // Ajustar el valor en un futuro para balancear la reducción de dano por defensa
 	    // 1. Reducción por estadística defensa (siempre aplica, porcentual)
-	    double reduccionDefensa = this.defensa / (this.defensa + K);
+	    int defensaReal = this.defensa;
+	    if (this instanceof Heroe) {
+	        defensaReal = ((Heroe) this).getDefensaTotal();
+	    }
+	    double reduccionDefensa = defensaReal / (defensaReal + K);
 	    double danoReducido = cantidadDano * (1.0 - reduccionDefensa);
 	    // 2. Si está defendiendo, aplica reducción adicional encima
 	    if (this.estaDefendiendo) {
