@@ -405,11 +405,11 @@ public class ControladorJuego {
 
 			nivelActual++;
 			partida.setNivel(nivelActual);
-
+			/*
 			for (Heroe h : partida.getGrupo().getHeroesVivos()) {
 				h.restaurarStatusCompleto();
 			}
-
+			*/
 			String msgCarga = orquestador.iniciarBatalla(nivelActual);
 
 			if (orquestador.getBatallaActual() != null) {
